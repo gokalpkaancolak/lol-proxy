@@ -311,23 +311,28 @@
       localStorage.setItem('lol5_site_ts', new Date().toISOString());
     }
 
-    async function fetchPlayer(i) {
+        async function fetchPlayer(i) {
       const p = players[i];
       if (!p.gameName || !p.tag) return;
       p.loading = true; p.error = '';
       renderCard(i);
       try {
-        const accRes = await fetch(`${PROXY}?path=riot/account/v1/accounts/by-riot-id/${encodeURIComponent(p.gameName)}/${encodeURIComponent(p.tag)}&region=europe`);
+        // Step 1: PUUID al
+        const accRes = await fetch(`${PROXY}?region=europe&path=riot/account/v1/accounts/by-riot-id/${encodeURIComponent(p.gameName)}/${encodeURIComponent(p.tag)}`);
         const acc = await accRes.json();
         if (!acc.puuid) throw new Error(acc.status?.message || 'Hesap bulunamadı');
 
+        // Step 2: Summoner ID al (euw1)
         const sumRes = await fetch(`${PROXY}?path=lol/summoner/v4/summoners/by-puuid/${acc.puuid}`);
         const sum = await sumRes.json();
-        if (!sum.id) throw new Error('Summoner bulunamadı');
+        if (!sum.id) throw new Error('Summoner ID alınamadı: ' + JSON.stringify(sum));
 
+        // Step 3: Ranked data al
         const rankRes = await fetch(`${PROXY}?path=lol/league/v4/entries/by-summoner/${sum.id}`);
         const rankData = await rankRes.json();
-        const solo = Array.isArray(rankData) ? rankData.find(e => e.queueType === 'RANKED_SOLO_5x5') : null;
+        const solo = Array.isArray(rankData)
+          ? rankData.find(e => e.queueType === 'RANKED_SOLO_5x5')
+          : null;
 
         if (solo) {
           p.tier = solo.tier; p.division = solo.rank;
@@ -336,7 +341,9 @@
           p.tier = 'Unranked'; p.division = ''; p.lp = 0; p.wins = 0; p.losses = 0;
         }
         p.error = '';
-      } catch(err) { p.error = err.message || 'Hata'; }
+      } catch(err) {
+        p.error = err.message || 'Hata';
+      }
       p.loading = false;
       persist();
       renderCard(i);
