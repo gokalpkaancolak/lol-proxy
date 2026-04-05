@@ -8,8 +8,6 @@ export default async function handler(req, res) {
   if (!path) return res.status(400).json({ error: 'path required' });
 
   const apiKey = process.env.RIOT_API_KEY;
-
-  // Account API uses europe/americas/asia, others use euw1
   const host = region === 'europe'
     ? 'https://europe.api.riotgames.com'
     : 'https://euw1.api.riotgames.com';
