@@ -167,51 +167,45 @@
     }
 
     async function fetchPlayer(i) {
-      const p = players[i];
-      if (!p.gameName || !p.tag) return;
-      p.loading = true;
-      p.error = '';
-      renderCard(i);
+  const p = players[i];
+  if (!p.gameName || !p.tag) return;
+  p.loading = true;
+  p.error = '';
+  renderCard(i);
 
-      try {
-        // 1. PUUID al - europe bölgesi
-        const accUrl = PROXY + '?region=europe&path=' + encodeURIComponent('riot/account/v1/accounts/by-riot-id/' + p.gameName + '/' + p.tag);
-        const accRes = await fetch(accUrl);
-        const acc = await accRes.json();
-        if (!acc.puuid) throw new Error(acc.status ? acc.status.message : 'Hesap bulunamadı');
+  try {
+    // 1. PUUID al
+    const accUrl = PROXY + '?region=europe&path=' + encodeURIComponent('riot/account/v1/accounts/by-riot-id/' + p.gameName + '/' + p.tag);
+    const accRes = await fetch(accUrl);
+    const acc = await accRes.json();
+    if (!acc.puuid) throw new Error(acc.status ? acc.status.message : 'Hesap bulunamadı');
 
-        // 2. Summoner al - euw1 bölgesi
-        const sumUrl = PROXY + '?path=' + encodeURIComponent('lol/summoner/v4/summoners/by-puuid/' + acc.puuid);
-        const sumRes = await fetch(sumUrl);
-        const sum = await sumRes.json();
-        if (!sum.id) throw new Error('Summoner bulunamadı');
+    // 2. Direkt PUUID ile ranked data al (id gerekmez)
+    const rankUrl = PROXY + '?path=' + encodeURIComponent('lol/league/v4/entries/by-puuid/' + acc.puuid);
+    const rankRes = await fetch(rankUrl);
+    const rankData = await rankRes.json();
+    const solo = Array.isArray(rankData) ? rankData.find(e => e.queueType === 'RANKED_SOLO_5x5') : null;
 
-        // 3. Rank al - euw1 bölgesi
-        const rankUrl = PROXY + '?path=' + encodeURIComponent('lol/league/v4/entries/by-summoner/' + sum.id);
-        const rankRes = await fetch(rankUrl);
-        const rankData = await rankRes.json();
-        const solo = Array.isArray(rankData) ? rankData.find(e => e.queueType === 'RANKED_SOLO_5x5') : null;
-
-        if (solo) {
-          p.tier = solo.tier;
-          p.division = solo.rank;
-          p.lp = solo.leaguePoints;
-          p.wins = solo.wins;
-          p.losses = solo.losses;
-        } else {
-          p.tier = 'Unranked'; p.division = ''; p.lp = 0; p.wins = 0; p.losses = 0;
-        }
-        p.error = '';
-      } catch(err) {
-        p.error = err.message || 'Hata oluştu';
-      }
-
-      p.loading = false;
-      persist();
-      renderCard(i);
-      renderLeaderboard();
-      updateTimestamp();
+    if (solo) {
+      p.tier = solo.tier;
+      p.division = solo.rank;
+      p.lp = solo.leaguePoints;
+      p.wins = solo.wins;
+      p.losses = solo.losses;
+    } else {
+      p.tier = 'Unranked'; p.division = ''; p.lp = 0; p.wins = 0; p.losses = 0;
     }
+    p.error = '';
+  } catch(err) {
+    p.error = err.message || 'Hata oluştu';
+  }
+
+  p.loading = false;
+  persist();
+  renderCard(i);
+  renderLeaderboard();
+  updateTimestamp();
+}
 
     async function refreshAll() {
       await Promise.all(players.map((p, i) => p.gameName && p.tag ? fetchPlayer(i) : Promise.resolve()));
