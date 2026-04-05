@@ -12,7 +12,8 @@ export default async function handler(req, res) {
     ? 'https://europe.api.riotgames.com'
     : 'https://euw1.api.riotgames.com';
 
-  const url = `${host}/${path}`;
+  const decodedPath = decodeURIComponent(path);
+  const url = `${host}/${decodedPath}`;
 
   try {
     const response = await fetch(url, {
