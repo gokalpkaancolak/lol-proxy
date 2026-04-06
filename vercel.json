@@ -1,4 +1,5 @@
 {
+  "cleanUrls": true,
   "rewrites": [
     { "source": "/api/riot", "destination": "/api/riot" },
     { "source": "/(.*)", "destination": "/index.html" }
