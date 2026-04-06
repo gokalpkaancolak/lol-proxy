@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CBA BUYUK LOL IDDIASI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Inter, sans-serif; background: #0a0a0f; color: #e8e6e0; min-height: 100vh; }
+    .bg { position: fixed; inset: 0; z-index: 0; background: radial-gradient(ellipse 80% 50% at 20% 0%, rgba(120,83,255,0.08) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 80% 100%, rgba(0,196,196,0.06) 0%, transparent 60%), #0a0a0f; }
+    .container { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+    .header { text-align: center; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 0.5px solid rgba(255,255,255,0.08); }
+    .header h1 { font-size: clamp(20px, 5vw, 32px); font-weight: 700; color: #fff; letter-spacing: 3px; }
+    .header .subtitle { font-size: 12px; color: rgba(255,255,255,0.35); margin-top: 6px; letter-spacing: 2px; text-transform: uppercase; }
+    .leader-bar { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 1.5rem; padding: 12px 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 0.5px solid rgba(255,255,255,0.08); }
+    .leader-bar .lbl { font-size: 11px; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 1px; }
+    .leader-bar .val { font-size: 20px; font-weight: 600; color: #FFB800; margin-top: 2px; }
+    .refresh-all-btn { display: block; width: 100%; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; padding: 10px; cursor: pointer; border-radius: 10px; border: 0.5px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.5); margin-bottom: 1.5rem; transition: background 0.15s, color 0.15s; }
+    .refresh-all-btn:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.8); }
+    .players-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 2rem; }
+    .player-card { background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; position: relative; overflow: hidden; transition: border-color 0.15s; }
+    .player-card:hover { border-color: rgba(255,255,255,0.16); }
+    .accent-bar { position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+    .name-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; margin-top: 4px; }
+    .pname { font-size: 15px; font-weight: 700; color: #fff; }
+    .rank-badge { font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 20px; letter-spacing: 0.5px; white-space: nowrap; }
+    .summoner-row { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+    .summoner-txt { font-size: 11px; color: rgba(255,255,255,0.3); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .log-btn { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding: 2px 8px; border-radius: 6px; border: 0.5px solid rgba(255,255,255,0.15); background: transparent; color: rgba(255,255,255,0.4); cursor: pointer; text-decoration: none; white-space: nowrap; }
+    .log-btn:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); }
+    .stats-row { display: flex; gap: 8px; margin-bottom: 12px; }
+    .stat-box { flex: 1; text-align: center; padding: 8px 4px; border-radius: 8px; }
+    .stat-box .num { font-size: 20px; font-weight: 600; line-height: 1; }
+    .stat-box .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 3px; }
+    .win-box { background: rgba(59,109,17,0.25); } .win-box .num { color: #97C459; } .win-box .lbl { color: #639922; }
+    .lose-box { background: rgba(163,45,45,0.25); } .lose-box .num { color: #F09595; } .lose-box .lbl { color: #E24B4A; }
+    .wr-box { background: rgba(255,255,255,0.05); } .wr-box .num { color: #e8e6e0; } .wr-box .lbl { color: rgba(255,255,255,0.35); }
+    .progress-section { margin-bottom: 8px; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.3); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .progress-track { height: 5px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+    .card-btns { display: flex; gap: 6px; margin-top: 10px; }
+    .card-btn { flex: 1; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px; cursor: pointer; border-radius: 8px; border: 0.5px solid rgba(255,255,255,0.12); background: transparent; color: rgba(255,255,255,0.4); transition: background 0.15s, color 0.15s; }
+    .card-btn:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.7); }
+    .card-btn:disabled { opacity: 0.4; cursor: default; }
+    .status-txt { font-size: 11px; color: rgba(255,255,255,0.35); margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+    .section-title { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.25); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 10px; }
+    .lb-row { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-radius: 10px; border: 0.5px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02); margin-bottom: 6px; transition: border-color 0.15s; }
+    .lb-row:hover { border-color: rgba(255,255,255,0.13); }
+    .lb-pos { font-size: 16px; font-weight: 700; width: 24px; text-align: center; color: rgba(255,255,255,0.2); }
+    .lb-pos.gold { color: #FFB800; } .lb-pos.silver { color: #9e9e9e; } .lb-pos.bronze { color: #cd7f32; }
+    .lb-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .lb-name { font-size: 13px; font-weight: 700; color: #fff; flex: 1; }
+    .lb-rank { font-size: 11px; color: rgba(255,255,255,0.35); white-space: nowrap; }
+    .lb-stats { display: flex; gap: 10px; align-items: center; }
+    .lb-wr { font-size: 13px; font-weight: 600; color: #e8e6e0; }
+    .lb-wl { font-size: 11px; color: rgba(255,255,255,0.3); }
+    .lb-bar-wrap { width: 50px; height: 4px; background: rgba(255,255,255,0.07); border-radius: 2px; overflow: hidden; }
+    .lb-bar-fill { height: 100%; border-radius: 2px; }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: #13131a; border: 0.5px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 22px; width: 320px; max-width: 90vw; }
+    .modal h2 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 18px; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: rgba(255,255,255,0.4); margin-bottom: 5px; }
+    .field input { width: 100%; font-size: 14px; background: rgba(255,255,255,0.05); border: 0.5px solid rgba(255,255,255,0.12); border-radius: 8px; color: #e8e6e0; padding: 8px 10px; outline: none; font-family: Inter, sans-serif; }
+    .field input:focus { border-color: rgba(255,255,255,0.25); }
+    .field .hint { font-size: 10px; color: rgba(255,255,255,0.25); margin-top: 4px; }
+    .modal-btns { display: flex; gap: 8px; margin-top: 18px; }
+    .btn-save { flex: 1; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding: 9px; border-radius: 8px; border: none; cursor: pointer; color: #fff; background: #378ADD; font-family: Inter, sans-serif; }
+    .btn-cancel { flex: 1; font-size: 13px; text-transform: uppercase; padding: 9px; border-radius: 8px; border: 0.5px solid rgba(255,255,255,0.12); background: transparent; cursor: pointer; color: rgba(255,255,255,0.4); font-family: Inter, sans-serif; }
+    .footer { text-align: center; font-size: 11px; color: rgba(255,255,255,0.2); margin-top: 2rem; }
+    .footer a { color: rgba(55,138,221,0.7); text-decoration: none; }
+    @media (max-width: 500px) { .lb-rank { display: none; } .lb-bar-wrap { display: none; } }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="container">
+    <div class="header">
+      <h1>CBA BUYUK LOL IDDIASI</h1>
+      <div class="subtitle">50 Mac Iddiasi - Dereceli - EUW</div>
+    </div>
+    <div class="leader-bar">
+      <div>
+        <div class="lbl">Lider</div>
+        <div class="val" id="leader-name">-</div>
+      </div>
+    </div>
+    <button class="refresh-all-btn" onclick="refreshAll()">Tum Verileri Guncelle</button>
+    <div class="players-grid" id="players-grid"></div>
+    <div style="margin-bottom:1.5rem;">
+      <div class="section-title">Siralama</div>
+      <div id="lb-list"></div>
+    </div>
+    <div class="footer" id="last-updated"></div>
+    <div class="footer" style="margin-top:6px;">Riot API - <a href="https://www.leagueofgraphs.com" target="_blank">leagueofgraphs.com</a></div>
+  </div>
+  <div class="modal-overlay" id="modal">
+    <div class="modal">
+      <h2 id="modal-title">Oyuncu Duzenle</h2>
+      <div class="field">
+        <label>Oyun Adi</label>
+        <input type="text" id="f-gamename" placeholder="or: teigoff">
+        <div class="hint">Riot ID hash isaretinden onceki kisim</div>
+      </div>
+      <div class="field">
+        <label>Tag</label>
+        <input type="text" id="f-tag" placeholder="or: 8255">
+        <div class="hint">Riot ID hash isaretinden sonraki kisim</div>
+      </div>
+      <div class="modal-btns">
+        <button class="btn-cancel" onclick="closeModal()">Iptal</button>
+        <button class="btn-save" onclick="saveAndFetch()">Kaydet</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    var PROXY = 'https://lol-proxy-chi.vercel.app/api/riot';
+    var TOTAL = 50;
+    var RC = {
+      'Unranked':    { a:'#888780', b:'rgba(136,135,128,0.2)', t:'#b0afa8' },
+      'IRON':        { a:'#7a4e42', b:'rgba(122,78,66,0.25)',  t:'#c4917f' },
+      'BRONZE':      { a:'#cd7f32', b:'rgba(205,127,50,0.2)',  t:'#e8a96a' },
+      'SILVER':      { a:'#9e9e9e', b:'rgba(158,158,158,0.2)', t:'#c8c8c8' },
+      'GOLD':        { a:'#FFB800', b:'rgba(255,184,0,0.2)',   t:'#FFD666' },
+      'PLATINUM':    { a:'#00c4c4', b:'rgba(0,196,196,0.2)',   t:'#5de8e8' },
+      'EMERALD':     { a:'#00a86b', b:'rgba(0,168,107,0.2)',   t:'#4dce9a' },
+      'DIAMOND':     { a:'#7c83ff', b:'rgba(124,131,255,0.2)', t:'#b0b5ff' },
+      'MASTER':      { a:'#9d00ff', b:'rgba(157,0,255,0.2)',   t:'#cc66ff' },
+      'GRANDMASTER': { a:'#e84040', b:'rgba(232,64,64,0.2)',   t:'#ff8080' },
+      'CHALLENGER':  { a:'#0bcee8', b:'rgba(11,206,232,0.2)',  t:'#6ee8f5' }
+    };
+    var ROMAN = { I:'1', II:'2', III:'3', IV:'4' };
+    var TIER_ORDER = { CHALLENGER:10, GRANDMASTER:9, MASTER:8, DIAMOND:7, EMERALD:6, PLATINUM:5, GOLD:4, SILVER:3, BRONZE:2, IRON:1, Unranked:0 };
+    var DIV_ORDER = { I:4, II:3, III:2, IV:1 };
+
+    function rankScore(p) {
+      var t = TIER_ORDER[p.tier] || 0;
+      var d = DIV_ORDER[p.division] || 0;
+      var l = p.lp || 0;
+      return t * 10000 + d * 1000 + l;
+    }
+
+    function rc(tier) { return RC[tier] || RC['Unranked']; }
+    function capitalize(s) { if (!s) return ''; return s.charAt(0) + s.slice(1).toLowerCase(); }
+    function rankLabel(tier, division, lp) {
+      if (!tier || tier === 'Unranked') return 'Unranked';
+      var single = ['MASTER','GRANDMASTER','CHALLENGER'];
+      if (single.indexOf(tier) !== -1) return capitalize(tier) + ' - ' + lp + ' LP';
+      return capitalize(tier) + ' ' + (ROMAN[division] || division) + ' - ' + lp + ' LP';
+    }
+
+    var DEF = [
+      { name:'Gokalp', gameName:'teigoff', tag:'8255',  tier:'Unranked', division:'', lp:0, wins:0, losses:0 },
+      { name:'Omer',   gameName:'LASHERZ', tag:'GRT27', tier:'Unranked', division:'', lp:0, wins:0, losses:0 },
+      { name:'Ugur',   gameName:'puboiES', tag:'2221',  tier:'Unranked', division:'', lp:0, wins:0, losses:0 },
+      { name:'Emre',   gameName:'hotchess',tag:'576',   tier:'Unranked', division:'', lp:0, wins:0, losses:0 },
+      { name:'Polat',  gameName:'aoh',     tag:'www',   tier:'Unranked', division:'', lp:0, wins:0, losses:0 }
+    ];
+
+    var players = JSON.parse(localStorage.getItem('lol_v6') || 'null') || DEF;
+    for (var i = 0; i < players.length; i++) { players[i].loading = false; players[i].error = ''; }
+    var ei = -1;
+
+    function persist() {
+      var toSave = players.map(function(p) { return { name:p.name, gameName:p.gameName, tag:p.tag, tier:p.tier, division:p.division, lp:p.lp, wins:p.wins, losses:p.losses }; });
+      localStorage.setItem('lol_v6', JSON.stringify(toSave));
+      localStorage.setItem('lol_v6_ts', new Date().toISOString());
+    }
+
+    function fetchPlayer(i) {
+      var p = players[i];
+      if (!p.gameName || !p.tag) return Promise.resolve();
+      p.loading = true; p.error = '';
+      renderCard(i);
+      return fetch(PROXY + '?region=europe&path=riot/account/v1/accounts/by-riot-id/' + p.gameName + '/' + p.tag)
+        .then(function(r) { return r.json(); })
+        .then(function(acc) {
+          if (!acc.puuid) throw new Error(acc.status ? acc.status.message : 'Hesap bulunamadi');
+          return fetch(PROXY + '?path=lol/league/v4/entries/by-puuid/' + acc.puuid);
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(rankData) {
+          var entries = Array.isArray(rankData) ? rankData : [rankData];
+          var solo = null;
+          for (var j = 0; j < entries.length; j++) {
+            if (entries[j].queueType === 'RANKED_SOLO_5x5') { solo = entries[j]; break; }
+          }
+          if (solo) {
+            p.tier = solo.tier; p.division = solo.rank;
+            p.lp = solo.leaguePoints; p.wins = solo.wins; p.losses = solo.losses;
+          } else {
+            p.tier = 'Unranked'; p.division = ''; p.lp = 0; p.wins = 0; p.losses = 0;
+          }
+          p.error = '';
+        })
+        .catch(function(err) { p.error = err.message || 'Hata'; })
+        .then(function() {
+          p.loading = false;
+          persist();
+          renderCard(i);
+          renderLeaderboard();
+          updateTimestamp();
+        });
+    }
+
+    function refreshAll() {
+      var promises = [];
+      for (var i = 0; i < players.length; i++) {
+        if (players[i].gameName && players[i].tag) promises.push(fetchPlayer(i));
+      }
+      return Promise.all(promises);
+    }
+
+    function renderCard(i) {
+      var p = players[i];
+      var card = document.getElementById('card-' + i);
+      if (!card) return;
+      var played = p.wins + p.losses;
+      var rem = Math.max(0, TOTAL - played);
+      var wr = played > 0 ? Math.round(p.wins / played * 100) : 0;
+      var pct = Math.min(100, Math.round(played / TOTAL * 100));
+      var c = rc(p.tier);
+      var rl = rankLabel(p.tier, p.division, p.lp);
+      var hasAcc = p.gameName && p.tag;
+      var logUrl = hasAcc ? 'https://www.leagueofgraphs.com/summoner/euw/' + p.gameName.toLowerCase() + '-' + p.tag : '';
+      card.innerHTML =
+        '<div class="accent-bar" style="background:' + c.a + '"></div>' +
+        '<div class="name-row"><div class="pname">' + p.name + '</div><div class="rank-badge" style="background:' + c.b + ';color:' + c.t + '">' + rl + '</div></div>' +
+        '<div class="summoner-row"><div class="summoner-txt">' + (hasAcc ? p.gameName + '#' + p.tag : '-- hesap eklenmedi') + '</div>' + (logUrl ? '<a class="log-btn" href="' + logUrl + '" target="_blank">LoG</a>' : '') + '</div>' +
+        (p.loading ? '<div class="status-txt"><span class="status-dot" style="background:#FFB800"></span>Yukleniyor...</div>' : '') +
+        (p.error ? '<div class="status-txt"><span class="status-dot" style="background:#E24B4A"></span>' + p.error + '</div>' : '') +
+        '<div class="stats-row"><div class="stat-box win-box"><div class="num">' + p.wins + '</div><div class="lbl">Galibiyet</div></div><div class="stat-box lose-box"><div class="num">' + p.losses + '</div><div class="lbl">Maglubiyet</div></div><div class="stat-box wr-box"><div class="num">' + wr + '%</div><div class="lbl">Oran</div></div></div>' +
+        '<div class="progress-section"><div class="progress-label"><span>' + played + ' / ' + TOTAL + ' mac</span><span style="font-weight:600;color:' + (rem === 0 ? '#97C459' : 'rgba(255,255,255,0.6)') + '">' + rem + ' kalan</span></div><div class="progress-track"><div class="progress-fill" style="width:' + pct + '%;background:' + c.a + '"></div></div></div>' +
+        '<div class="card-btns">' + (hasAcc ? '<button class="card-btn" onclick="fetchPlayer(' + i + ')" ' + (p.loading ? 'disabled' : '') + '>Yenile</button>' : '') + '<button class="card-btn" onclick="openModal(' + i + ')">Duzenle</button></div>';
+    }
+
+    function render() {
+      var grid = document.getElementById('players-grid');
+      grid.innerHTML = '';
+      for (var i = 0; i < players.length; i++) {
+        var card = document.createElement('div');
+        card.className = 'player-card';
+        card.id = 'card-' + i;
+        grid.appendChild(card);
+        renderCard(i);
+      }
+      renderLeaderboard();
+      updateTimestamp();
+    }
+
+    function renderLeaderboard() {
+      var sorted = players.slice().map(function(p, i) { return { p:p, i:i, score:rankScore(p) }; });
+      sorted.sort(function(a, b) { return b.score - a.score; });
+      document.getElementById('leader-name').textContent = sorted[0].score > 0 ? sorted[0].p.name : '-';
+      var posColors = ['gold','silver','bronze','',''];
+      var list = document.getElementById('lb-list');
+      list.innerHTML = '';
+      for (var idx = 0; idx < sorted.length; idx++) {
+        var p = sorted[idx].p;
+        var played = p.wins + p.losses;
+        var wr = played > 0 ? Math.round(p.wins / played * 100) : 0;
+        var c = rc(p.tier);
+        var rl = rankLabel(p.tier, p.division, p.lp);
+        var row = document.createElement('div');
+        row.className = 'lb-row';
+        row.innerHTML = '<div class="lb-pos ' + posColors[idx] + '">' + (idx+1) + '</div><div class="lb-dot" style="background:' + c.a + '"></div><div class="lb-name">' + p.name + '</div><div class="lb-rank">' + rl + '</div><div class="lb-stats"><div class="lb-bar-wrap"><div class="lb-bar-fill" style="width:' + wr + '%;background:' + c.a + '"></div></div><div class="lb-wr">' + wr + '%</div><div class="lb-wl">' + p.wins + 'G ' + p.losses + 'M</div></div>';
+        list.appendChild(row);
+      }
+    }
+
+    function updateTimestamp() {
+      var ts = localStorage.getItem('lol_v6_ts');
+      if (ts) {
+        var d = new Date(ts);
+        document.getElementById('last-updated').textContent = 'Son guncelleme: ' + d.toLocaleDateString('tr-TR') + ' ' + d.toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'});
+      }
+    }
+
+    function openModal(i) {
+      ei = i;
+      var p = players[i];
+      document.getElementById('modal-title').textContent = p.name + ' - Duzenle';
+      document.getElementById('f-gamename').value = p.gameName || '';
+      document.getElementById('f-tag').value = p.tag || '';
+      document.getElementById('modal').classList.add('open');
+    }
+
+    function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+    function saveAndFetch() {
+      players[ei].gameName = document.getElementById('f-gamename').value.trim();
+      players[ei].tag = document.getElementById('f-tag').value.trim();
+      persist(); closeModal(); renderCard(ei);
+      fetchPlayer(ei);
+    }
+
+    document.getElementById('modal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+
+    render();
+    refreshAll();
+  </script>
+</body>
+</html>
