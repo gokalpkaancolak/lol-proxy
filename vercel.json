@@ -1,11 +1,6 @@
 {
-  "version": 2,
-  "builds": [
-    { "src": "api/riot.js", "use": "@vercel/node" },
-    { "src": "public/index.html", "use": "@vercel/static" }
-  ],
-  "routes": [
-    { "src": "/api/riot", "dest": "/api/riot.js" },
-    { "src": "/(.*)", "dest": "/public/index.html" }
+  "rewrites": [
+    { "source": "/api/riot", "destination": "/api/riot" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
