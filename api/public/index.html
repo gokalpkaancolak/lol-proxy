@@ -140,6 +140,9 @@
     };
     const ROMAN = { I:'1', II:'2', III:'3', IV:'4' };
 
+    const TIER_ORDER = { 'CHALLENGER':10, 'GRANDMASTER':9, 'MASTER':8, 'DIAMOND':7, 'EMERALD':6, 'PLATINUM':5, 'GOLD':4, 'SILVER':3, 'BRONZE':2, 'IRON':1, 'Unranked':0 };
+    const DIV_ORDER  = { 'I':4, 'II':3, 'III':2, 'IV':1 };
+    function rankScore(p) { var t = TIER_ORDER[p.tier]||0; var d = DIV_ORDER[p.division]||0; var l = p.lp||0; return t*10000+d*1000+l; }
     function rc(tier) { return RC[tier] || RC['Unranked']; }
     function capitalize(s) { if (!s) return ''; return s.charAt(0) + s.slice(1).toLowerCase(); }
     function rankLabel(tier, division, lp) {
@@ -265,16 +268,6 @@
       });
       renderLeaderboard();
       updateTimestamp();
-    }
-
-    const TIER_ORDER = { 'CHALLENGER':10, 'GRANDMASTER':9, 'MASTER':8, 'DIAMOND':7, 'EMERALD':6, 'PLATINUM':5, 'GOLD':4, 'SILVER':3, 'BRONZE':2, 'IRON':1, 'Unranked':0 };
-    const DIV_ORDER  = { 'I':4, 'II':3, 'III':2, 'IV':1 };
-
-    function rankScore(p) {
-      const tier = TIER_ORDER[p.tier] || 0;
-      const div  = DIV_ORDER[p.division] || 0;
-      const lp   = p.lp || 0;
-      return tier * 10000 + div * 1000 + lp;
     }
 
     function renderLeaderboard() {
