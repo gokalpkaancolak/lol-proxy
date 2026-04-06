@@ -230,7 +230,7 @@
       card.innerHTML =
         '<div class="accent-bar" style="background:' + c.a + '"></div>' +
         '<div class="name-row"><div class="pname">' + p.name + '</div><div class="rank-badge" style="background:' + c.b + ';color:' + c.t + '">' + rl + '</div></div>' +
-        '<div class="summoner-row"><div class="summoner-txt">' + (hasAcc ? p.gameName + '#' + p.tag : '-- hesap eklenmedi') + '</div>' + (logUrl ? '<a class="log-btn" href="' + logUrl + '" target="_blank">LoG</a>' : '') + '</div>' +
+        '<div class="summoner-row"><div class="summoner-txt">' + (hasAcc ? p.gameName + '#' + p.tag : '-- hesap eklenmedi') + '</div>' + (logUrl ? '<a class="log-btn" href="' + logUrl + '" target="_blank">LoG</a>' : '') + (hasAcc ? '<a class="log-btn" href="https://www.op.gg/summoners/euw/' + p.gameName + '-' + p.tag + '" target="_blank">OP.GG</a>' : '') + '</div>' +
         (p.loading ? '<div class="status-txt"><span class="status-dot" style="background:#FFB800"></span>Yukleniyor...</div>' : '') +
         (p.error ? '<div class="status-txt"><span class="status-dot" style="background:#E24B4A"></span>' + p.error + '</div>' : '') +
         '<div class="stats-row"><div class="stat-box win-box"><div class="num">' + p.wins + '</div><div class="lbl">Galibiyet</div></div><div class="stat-box lose-box"><div class="num">' + p.losses + '</div><div class="lbl">Maglubiyet</div></div><div class="stat-box wr-box"><div class="num">' + wr + '%</div><div class="lbl">Oran</div></div></div>' +
