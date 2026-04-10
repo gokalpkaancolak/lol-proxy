@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CBA BUYUK LOL IDDIASI</title>
+  <title>CBA BÜYÜK LOL İDDİASI</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -80,40 +80,40 @@
   <div class="bg"></div>
   <div class="container">
     <div class="header">
-      <h1>CBA BUYUK LOL IDDIASI</h1>
-      <div class="subtitle">50 Mac Iddiasi - Dereceli - EUW</div>
+      <h1>CBA BÜYÜK LOL İDDİASI</h1>
+      <div class="subtitle">50 Maç İddiası · Dereceli · EUW</div>
     </div>
     <div class="leader-bar">
       <div>
-        <div class="lbl">Lider</div>
+        <div class="lbl">👑 Lider</div>
         <div class="val" id="leader-name">-</div>
       </div>
     </div>
-    <button class="refresh-all-btn" onclick="refreshAll()">Tum Verileri Guncelle</button>
+    <button class="refresh-all-btn" onclick="refreshAll()">⟳ Tüm Verileri Güncelle</button>
     <div class="players-grid" id="players-grid"></div>
     <div style="margin-bottom:1.5rem;">
-      <div class="section-title">Siralama</div>
+      <div class="section-title">Sıralama</div>
       <div id="lb-list"></div>
     </div>
     <div class="footer" id="last-updated"></div>
-    <div class="footer" style="margin-top:6px;">Riot API - <a href="https://www.leagueofgraphs.com" target="_blank">leagueofgraphs.com</a></div>
+    <div class="footer" style="margin-top:6px;">Riot API · <a href="https://www.leagueofgraphs.com" target="_blank">leagueofgraphs.com</a></div>
   </div>
   <div class="modal-overlay" id="modal">
     <div class="modal">
-      <h2 id="modal-title">Oyuncu Duzenle</h2>
+      <h2 id="modal-title">Oyuncu Düzenle</h2>
       <div class="field">
         <label>Oyun Adi</label>
-        <input type="text" id="f-gamename" placeholder="or: teigoff">
-        <div class="hint">Riot ID hash isaretinden onceki kisim</div>
+        <input type="text" id="f-gamename" placeholder="ör: teigoff">
+        <div class="hint">Riot ID'nin # işaretinden önceki kısım</div>
       </div>
       <div class="field">
         <label>Tag</label>
-        <input type="text" id="f-tag" placeholder="or: 8255">
-        <div class="hint">Riot ID hash isaretinden sonraki kisim</div>
+        <input type="text" id="f-tag" placeholder="ör: 8255">
+        <div class="hint">Riot ID'nin # işaretinden sonraki kısım</div>
       </div>
       <div class="modal-btns">
-        <button class="btn-cancel" onclick="closeModal()">Iptal</button>
-        <button class="btn-save" onclick="saveAndFetch()">Kaydet</button>
+        <button class="btn-cancel" onclick="closeModal()">İptal</button>
+        <button class="btn-save" onclick="saveAndFetch()">Kaydet & Çek</button>
       </div>
     </div>
   </div>
@@ -154,21 +154,22 @@
     }
 
     var DEF = [
-      { name:'Gokalp', gameName:'teigoff', tag:'8255',  tier:'Unranked', division:'', lp:0, wins:0, losses:0 },
-      { name:'Omer',   gameName:'LASHERZ', tag:'GRT27', tier:'Unranked', division:'', lp:0, wins:0, losses:0 },
-      { name:'Ugur',   gameName:'puboiES', tag:'2221',  tier:'Unranked', division:'', lp:0, wins:0, losses:0 },
+      { name:'Gökalp', gameName:'teigoff', tag:'8255',  tier:'Unranked', division:'', lp:0, wins:0, losses:0 },
+      { name:'Ömer',   gameName:'LASHERZ', tag:'GRT27', tier:'Unranked', division:'', lp:0, wins:0, losses:0 },
+      { name:'Uğur',   gameName:'puboiES', tag:'2221',  tier:'Unranked', division:'', lp:0, wins:0, losses:0 },
       { name:'Emre',   gameName:'hotchess',tag:'576',   tier:'Unranked', division:'', lp:0, wins:0, losses:0 },
-      { name:'Polat',  gameName:'aoh',     tag:'www',   tier:'Unranked', division:'', lp:0, wins:0, losses:0 }
+      { name:'Polat',  gameName:'aoh',     tag:'www',   tier:'Unranked', division:'', lp:0, wins:0, losses:0 },
+      { name:'Ömer (İkinci Hesap)', gameName:'Lasherzz', tag:'6980', tier:'Unranked', division:'', lp:0, wins:0, losses:0 }
     ];
 
-    var players = JSON.parse(localStorage.getItem('lol_v6') || 'null') || DEF;
+    var players = JSON.parse(localStorage.getItem('lol_v7') || 'null') || DEF;
     for (var i = 0; i < players.length; i++) { players[i].loading = false; players[i].error = ''; }
     var ei = -1;
 
     function persist() {
       var toSave = players.map(function(p) { return { name:p.name, gameName:p.gameName, tag:p.tag, tier:p.tier, division:p.division, lp:p.lp, wins:p.wins, losses:p.losses }; });
-      localStorage.setItem('lol_v6', JSON.stringify(toSave));
-      localStorage.setItem('lol_v6_ts', new Date().toISOString());
+      localStorage.setItem('lol_v7', JSON.stringify(toSave));
+      localStorage.setItem('lol_v7_ts', new Date().toISOString());
     }
 
     function fetchPlayer(i) {
@@ -179,7 +180,7 @@
       return fetch(PROXY + '?region=europe&path=riot/account/v1/accounts/by-riot-id/' + p.gameName + '/' + p.tag)
         .then(function(r) { return r.json(); })
         .then(function(acc) {
-          if (!acc.puuid) throw new Error(acc.status ? acc.status.message : 'Hesap bulunamadi');
+          if (!acc.puuid) throw new Error(acc.status ? acc.status.message : 'Hesap bulunamadı');
           return fetch(PROXY + '?path=lol/league/v4/entries/by-puuid/' + acc.puuid);
         })
         .then(function(r) { return r.json(); })
@@ -230,12 +231,12 @@
       card.innerHTML =
         '<div class="accent-bar" style="background:' + c.a + '"></div>' +
         '<div class="name-row"><div class="pname">' + p.name + '</div><div class="rank-badge" style="background:' + c.b + ';color:' + c.t + '">' + rl + '</div></div>' +
-        '<div class="summoner-row"><div class="summoner-txt">' + (hasAcc ? p.gameName + '#' + p.tag : '-- hesap eklenmedi') + '</div>' + (logUrl ? '<a class="log-btn" href="' + logUrl + '" target="_blank">LoG</a>' : '') + (hasAcc ? '<a class="log-btn" href="https://www.op.gg/summoners/euw/' + p.gameName + '-' + p.tag + '" target="_blank">OP.GG</a>' : '') + '</div>' +
-        (p.loading ? '<div class="status-txt"><span class="status-dot" style="background:#FFB800"></span>Yukleniyor...</div>' : '') +
+        '<div class="summoner-row"><div class="summoner-txt">' + (hasAcc ? p.gameName + '#' + p.tag : '— hesap eklenmedi') + '</div>' + (logUrl ? '<a class="log-btn" href="' + logUrl + '" target="_blank">LoG</a>' : '') + (hasAcc ? '<a class="log-btn" href="https://www.op.gg/summoners/euw/' + p.gameName + '-' + p.tag + '" target="_blank">OP.GG</a>' : '') + '</div>' +
+        (p.loading ? '<div class="status-txt"><span class="status-dot" style="background:#FFB800"></span>Yükleniyor...</div>' : '') +
         (p.error ? '<div class="status-txt"><span class="status-dot" style="background:#E24B4A"></span>' + p.error + '</div>' : '') +
-        '<div class="stats-row"><div class="stat-box win-box"><div class="num">' + p.wins + '</div><div class="lbl">Galibiyet</div></div><div class="stat-box lose-box"><div class="num">' + p.losses + '</div><div class="lbl">Maglubiyet</div></div><div class="stat-box wr-box"><div class="num">' + wr + '%</div><div class="lbl">Oran</div></div></div>' +
+        '<div class="stats-row"><div class="stat-box win-box"><div class="num">' + p.wins + '</div><div class="lbl">Galibiyet</div></div><div class="stat-box lose-box"><div class="num">' + p.losses + '</div><div class="lbl">Mağlubiyet</div></div><div class="stat-box wr-box"><div class="num">' + wr + '%</div><div class="lbl">Oran</div></div></div>' +
         '<div class="progress-section"><div class="progress-label"><span>' + played + ' / ' + TOTAL + ' mac</span><span style="font-weight:600;color:' + (rem === 0 ? '#97C459' : 'rgba(255,255,255,0.6)') + '">' + rem + ' kalan</span></div><div class="progress-track"><div class="progress-fill" style="width:' + pct + '%;background:' + c.a + '"></div></div></div>' +
-        '<div class="card-btns">' + (hasAcc ? '<button class="card-btn" onclick="fetchPlayer(' + i + ')" ' + (p.loading ? 'disabled' : '') + '>Yenile</button>' : '') + '<button class="card-btn" onclick="openModal(' + i + ')">Duzenle</button></div>';
+        '<div class="card-btns">' + (hasAcc ? '<button class="card-btn" onclick="fetchPlayer(' + i + ')" ' + (p.loading ? 'disabled' : '') + '>⟳ Yenile</button>' : '') + '<button class="card-btn" onclick="openModal(' + i + ')">Düzenle</button></div>';
     }
 
     function render() {
@@ -256,7 +257,8 @@
       var sorted = players.slice().map(function(p, i) { return { p:p, i:i, score:rankScore(p) }; });
       sorted.sort(function(a, b) { return b.score - a.score; });
       document.getElementById('leader-name').textContent = sorted[0].score > 0 ? sorted[0].p.name : '-';
-      var posColors = ['gold','silver','bronze','',''];
+      var posColors = ['gold','silver','bronze','','',''];
+      var posEmojis = ['👑','','','','','😂'];
       var list = document.getElementById('lb-list');
       list.innerHTML = '';
       for (var idx = 0; idx < sorted.length; idx++) {
@@ -267,16 +269,17 @@
         var rl = rankLabel(p.tier, p.division, p.lp);
         var row = document.createElement('div');
         row.className = 'lb-row';
-        row.innerHTML = '<div class="lb-pos ' + posColors[idx] + '">' + (idx+1) + '</div><div class="lb-dot" style="background:' + c.a + '"></div><div class="lb-name">' + p.name + '</div><div class="lb-rank">' + rl + '</div><div class="lb-stats"><div class="lb-bar-wrap"><div class="lb-bar-fill" style="width:' + wr + '%;background:' + c.a + '"></div></div><div class="lb-wr">' + wr + '%</div><div class="lb-wl">' + p.wins + 'G ' + p.losses + 'M</div></div>';
+        var emoji = idx === 0 ? ' 👑' : (idx === sorted.length - 1 ? ' 😂' : '');
+        row.innerHTML = '<div class="lb-pos ' + posColors[idx] + '">' + (idx+1) + '</div><div class="lb-dot" style="background:' + c.a + '"></div><div class="lb-name">' + p.name + emoji + '</div><div class="lb-rank">' + rl + '</div><div class="lb-stats"><div class="lb-bar-wrap"><div class="lb-bar-fill" style="width:' + wr + '%;background:' + c.a + '"></div></div><div class="lb-wr">' + wr + '%</div><div class="lb-wl">' + p.wins + 'G ' + p.losses + 'M</div></div>';
         list.appendChild(row);
       }
     }
 
     function updateTimestamp() {
-      var ts = localStorage.getItem('lol_v6_ts');
+      var ts = localStorage.getItem('lol_v7_ts');
       if (ts) {
         var d = new Date(ts);
-        document.getElementById('last-updated').textContent = 'Son guncelleme: ' + d.toLocaleDateString('tr-TR') + ' ' + d.toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'});
+        document.getElementById('last-updated').textContent = 'Son güncelleme: ' + d.toLocaleDateString('tr-TR') + ' ' + d.toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'});
       }
     }
 
