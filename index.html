@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
+  <script>
+    if (window.location.hostname === 'lol-proxy-chi.vercel.app') {
+      window.location.replace('https://cbaiddia.xyz');
+    }
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CBA BÜYÜK LOL İDDİASI</title>
@@ -286,7 +291,7 @@
     function openModal(i) {
       ei = i;
       var p = players[i];
-      document.getElementById('modal-title').textContent = p.name + ' - Duzenle';
+      document.getElementById('modal-title').textContent = p.name + ' · Düzenle';
       document.getElementById('f-gamename').value = p.gameName || '';
       document.getElementById('f-tag').value = p.tag || '';
       document.getElementById('modal').classList.add('open');
