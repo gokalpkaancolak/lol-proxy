@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <script>
-    }
-  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CBA BÜYÜK LOL İDDİASI</title>
@@ -121,7 +118,7 @@
     </div>
   </div>
   <script>
-var PROXY = '/api/riot';
+    var PROXY = '/api/riot';
     var TOTAL = 50;
     var RC = {
       'Unranked':    { a:'#888780', b:'rgba(136,135,128,0.2)', t:'#b0afa8' },
@@ -162,7 +159,7 @@ var PROXY = '/api/riot';
       { name:'Uğur',   gameName:'puboiES', tag:'2221',  tier:'Unranked', division:'', lp:0, wins:0, losses:0 },
       { name:'Emre',   gameName:'hotchess',tag:'576',   tier:'Unranked', division:'', lp:0, wins:0, losses:0 },
       { name:'Polat',  gameName:'aoh',     tag:'www',   tier:'Unranked', division:'', lp:0, wins:0, losses:0 },
-      { name:'Ömer (İkinci Hesap)', gameName:'Lasherzz', tag:'6980', tier:'Unranked', division:'', lp:0, wins:0, losses:0 }
+      { name:'Ömer (İkinci Hesap)', gameName:'Lasherzz', tag:'6980', tier:'GOLD', division:'II', lp:19, wins:18, losses:32 }
     ];
 
     var players = JSON.parse(localStorage.getItem('lol_v7') || 'null') || DEF;
@@ -178,6 +175,15 @@ var PROXY = '/api/riot';
     function fetchPlayer(i) {
       var p = players[i];
       if (!p.gameName || !p.tag) return Promise.resolve();
+
+      // SABİT HESAP MANTIĞI
+      if (p.name === 'Ömer (İkinci Hesap)') {
+        p.tier = 'GOLD'; p.division = 'II'; p.lp = 19; p.wins = 18; p.losses = 32;
+        p.loading = false; p.error = '';
+        persist(); renderCard(i); renderLeaderboard(); updateTimestamp();
+        return Promise.resolve();
+      }
+
       p.loading = true; p.error = '';
       renderCard(i);
       return fetch(PROXY + '?region=europe&path=riot/account/v1/accounts/by-riot-id/' + p.gameName + '/' + p.tag)
@@ -231,6 +237,10 @@ var PROXY = '/api/riot';
       var rl = rankLabel(p.tier, p.division, p.lp);
       var hasAcc = p.gameName && p.tag;
       var logUrl = hasAcc ? 'https://www.leagueofgraphs.com/summoner/euw/' + p.gameName.toLowerCase() + '-' + p.tag : '';
+      
+      var refreshBtnHtml = (hasAcc && p.name !== 'Ömer (İkinci Hesap)') ? 
+                           '<button class="card-btn" onclick="fetchPlayer(' + i + ')" ' + (p.loading ? 'disabled' : '') + '>⟳ Yenile</button>' : '';
+
       card.innerHTML =
         '<div class="accent-bar" style="background:' + c.a + '"></div>' +
         '<div class="name-row"><div class="pname">' + p.name + '</div><div class="rank-badge" style="background:' + c.b + ';color:' + c.t + '">' + rl + '</div></div>' +
@@ -239,7 +249,7 @@ var PROXY = '/api/riot';
         (p.error ? '<div class="status-txt"><span class="status-dot" style="background:#E24B4A"></span>' + p.error + '</div>' : '') +
         '<div class="stats-row"><div class="stat-box win-box"><div class="num">' + p.wins + '</div><div class="lbl">Galibiyet</div></div><div class="stat-box lose-box"><div class="num">' + p.losses + '</div><div class="lbl">Mağlubiyet</div></div><div class="stat-box wr-box"><div class="num">' + wr + '%</div><div class="lbl">Oran</div></div></div>' +
         '<div class="progress-section"><div class="progress-label"><span>' + played + ' / ' + TOTAL + ' mac</span><span style="font-weight:600;color:' + (rem === 0 ? '#97C459' : 'rgba(255,255,255,0.6)') + '">' + rem + ' kalan</span></div><div class="progress-track"><div class="progress-fill" style="width:' + pct + '%;background:' + c.a + '"></div></div></div>' +
-        '<div class="card-btns">' + (hasAcc ? '<button class="card-btn" onclick="fetchPlayer(' + i + ')" ' + (p.loading ? 'disabled' : '') + '>⟳ Yenile</button>' : '') + '<button class="card-btn" onclick="openModal(' + i + ')">Düzenle</button></div>';
+        '<div class="card-btns">' + refreshBtnHtml + '<button class="card-btn" onclick="openModal(' + i + ')">Düzenle</button></div>';
     }
 
     function render() {
@@ -261,7 +271,6 @@ var PROXY = '/api/riot';
       sorted.sort(function(a, b) { return b.score - a.score; });
       document.getElementById('leader-name').textContent = sorted[0].score > 0 ? sorted[0].p.name : '-';
       var posColors = ['gold','silver','bronze','','',''];
-      var posEmojis = ['👑','','','','','😂'];
       var list = document.getElementById('lb-list');
       list.innerHTML = '';
       for (var idx = 0; idx < sorted.length; idx++) {
@@ -300,7 +309,8 @@ var PROXY = '/api/riot';
     function saveAndFetch() {
       players[ei].gameName = document.getElementById('f-gamename').value.trim();
       players[ei].tag = document.getElementById('f-tag').value.trim();
-      persist(); closeModal(); renderCard(ei);
+      persist(); closeModal();
+      renderCard(ei);
       fetchPlayer(ei);
     }
 
