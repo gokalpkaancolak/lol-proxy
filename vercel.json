@@ -1,11 +1,4 @@
 {
-  "redirects": [
-    {
-      "source": "/:path*",
-      "destination": "https://cbaiddia.xyz/:path*",
-      "permanent": true
-    }
-  ],
   "rewrites": [
     {
       "source": "/api/riot",
