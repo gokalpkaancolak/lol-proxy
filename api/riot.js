@@ -8,9 +8,14 @@ export default async function handler(req, res) {
   if (!path) return res.status(400).json({ error: 'path required' });
 
   const apiKey = process.env.RIOT_API_KEY;
-  const host = region === 'europe'
-    ? 'https://europe.api.riotgames.com'
-    : 'https://euw1.api.riotgames.com';
+  
+  // Bölgeye göre Riot sunucusunu seçiyoruz
+  let host = 'https://euw1.api.riotgames.com'; // Varsayılan EUW
+  if (region === 'europe') {
+    host = 'https://europe.api.riotgames.com'; // Hesap ID sorguları için
+  } else if (region === 'tr1') {
+    host = 'https://tr1.api.riotgames.com'; // TR sunucusu rank sorguları için
+  }
 
   const decodedPath = decodeURIComponent(path);
   const url = `${host}/${decodedPath}`;
