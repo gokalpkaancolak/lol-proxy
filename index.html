@@ -40,7 +40,7 @@
     .refresh-all-btn { display: block; width: 100%; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; padding: 10px; cursor: pointer; border-radius: 10px; border: 0.5px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.5); margin-bottom: 1.5rem; transition: background 0.15s, color 0.15s; }
     .refresh-all-btn:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.8); }
     .players-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 2rem; }
-    .tancan-grid { display: flex; justify-content: center; } /* Tan Can'ı ortalamak için */
+    .tancan-grid { display: flex; justify-content: center; }
     .tancan-grid .player-card { width: 100%; max-width: 400px; }
     
     .player-card { background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; position: relative; overflow: hidden; transition: border-color 0.15s; }
@@ -397,7 +397,8 @@
         .then(function(r) { return r.json(); })
         .then(function(acc) {
           if (!acc.puuid) throw new Error(acc.status ? acc.status.message : 'Hesap bulunamadı');
-          return fetch(PROXY + '?path=lol/league/v4/entries/by-puuid/' + acc.puuid);
+          // TR SUNUCUSU İÇİN region=tr1 EKLENDİ
+          return fetch(PROXY + '?region=tr1&path=lol/league/v4/entries/by-puuid/' + acc.puuid);
         })
         .then(function(r) { return r.json(); })
         .then(function(rankData) {
@@ -432,8 +433,10 @@
       var wr = played > 0 ? Math.round(p.wins / played * 100) : 0;
       var c = rc(p.tier);
       var rl = rankLabel(p.tier, p.division, p.lp);
-      var logUrl = 'https://www.leagueofgraphs.com/summoner/euw/' + p.gameName.toLowerCase() + '-' + p.tag;
-      var opggUrl = 'https://www.op.gg/summoners/euw/' + p.gameName + '-' + p.tag;
+      
+      // LINKLER TR SUNUCUSU OLARAK GÜNCELLENDİ
+      var logUrl = 'https://www.leagueofgraphs.com/summoner/tr/' + p.gameName.toLowerCase() + '-' + p.tag;
+      var opggUrl = 'https://www.op.gg/summoners/tr/' + p.gameName + '-' + p.tag;
       
       var currentAbsLP = getAbsoluteLP(p);
       var lpNeeded = TARGET_LP - currentAbsLP;
