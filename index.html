@@ -10,15 +10,39 @@
     body { font-family: Inter, sans-serif; background: #0a0a0f; color: #e8e6e0; min-height: 100vh; }
     .bg { position: fixed; inset: 0; z-index: 0; background: radial-gradient(ellipse 80% 50% at 20% 0%, rgba(120,83,255,0.08) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 80% 100%, rgba(0,196,196,0.06) 0%, transparent 60%), #0a0a0f; }
     .container { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 2rem 1rem 4rem; }
-    .header { text-align: center; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 0.5px solid rgba(255,255,255,0.08); }
+    .header { text-align: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 0.5px solid rgba(255,255,255,0.08); }
     .header h1 { font-size: clamp(20px, 5vw, 32px); font-weight: 700; color: #fff; letter-spacing: 3px; }
-    .header .subtitle { font-size: 12px; color: rgba(255,255,255,0.35); margin-top: 6px; letter-spacing: 2px; text-transform: uppercase; }
+    
+    /* --- SEKME (TAB) SİSTEMİ --- */
+    .tabs { display: flex; gap: 10px; margin-bottom: 1.5rem; justify-content: center; }
+    .tab-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); padding: 10px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; font-family: Inter, sans-serif; transition: all 0.2s; letter-spacing: 1px; text-transform: uppercase; font-size: 12px; }
+    .tab-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .tab-btn.active { background: #FFB800; color: #000; border-color: #FFB800; box-shadow: 0 0 15px rgba(255,184,0,0.3); }
+    .tab-content { display: none; animation: fadeIn 0.3s ease; }
+    .tab-content.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* --- TAN EFE İDDİASI ÖZEL TASARIM --- */
+    .timer-container { text-align: center; margin-bottom: 1rem; background: rgba(255,255,255,0.02); padding: 20px; border-radius: 12px; border: 0.5px solid rgba(11,206,232,0.2); box-shadow: inset 0 0 20px rgba(11,206,232,0.05); }
+    .timer-lbl { font-size: 12px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 8px; font-weight: 600; }
+    .timer-val { font-size: clamp(24px, 5vw, 36px); font-weight: 700; color: #0bcee8; font-variant-numeric: tabular-nums; text-shadow: 0 0 10px rgba(11,206,232,0.4); }
+    
+    .target-lp-box { display: flex; justify-content: space-between; align-items: center; background: rgba(124,131,255,0.1); border: 1px solid rgba(124,131,255,0.3); color: #b0b5ff; padding: 16px 24px; border-radius: 12px; margin-bottom: 1.5rem; }
+    .target-lp-box .target-name { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; }
+    .target-lp-box .target-val { font-size: 18px; font-weight: 700; color: #fff; }
+    .target-lp-box .rem-lp { text-align: right; }
+    .target-lp-box .rem-lp-val { font-size: 28px; font-weight: 700; color: #FFB800; }
+
+    /* --- GENEL TASARIMLAR --- */
     .leader-bar { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 1.5rem; padding: 12px 24px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 0.5px solid rgba(255,255,255,0.08); }
     .leader-bar .lbl { font-size: 11px; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 1px; }
     .leader-bar .val { font-size: 20px; font-weight: 600; color: #FFB800; margin-top: 2px; }
     .refresh-all-btn { display: block; width: 100%; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; padding: 10px; cursor: pointer; border-radius: 10px; border: 0.5px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.5); margin-bottom: 1.5rem; transition: background 0.15s, color 0.15s; }
     .refresh-all-btn:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.8); }
     .players-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 2rem; }
+    .tancan-grid { display: flex; justify-content: center; } /* Tan Can'ı ortalamak için */
+    .tancan-grid .player-card { width: 100%; max-width: 400px; }
+    
     .player-card { background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; position: relative; overflow: hidden; transition: border-color 0.15s; }
     .player-card:hover { border-color: rgba(255,255,255,0.16); }
     .accent-bar { position: absolute; top: 0; left: 0; right: 0; height: 3px; }
@@ -37,7 +61,6 @@
     .lose-box { background: rgba(163,45,45,0.25); } .lose-box .num { color: #F09595; } .lose-box .lbl { color: #E24B4A; }
     .wr-box { background: rgba(255,255,255,0.05); } .wr-box .num { color: #e8e6e0; } .wr-box .lbl { color: rgba(255,255,255,0.35); }
     
-    /* Yeni Şehir Selamlama Stili */
     .city-greeting { font-size: 11px; font-weight: 600; color: #6ee8f5; text-align: center; margin-bottom: 10px; padding: 6px; background: rgba(11,206,232,0.1); border-radius: 8px; border: 0.5px solid rgba(11,206,232,0.2); letter-spacing: 0.5px; }
     
     .progress-section { margin-bottom: 8px; }
@@ -51,6 +74,8 @@
     .status-txt { font-size: 11px; color: rgba(255,255,255,0.35); margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
     .status-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
     .section-title { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.25); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 10px; }
+    
+    /* Sıralama Listesi */
     .lb-row { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-radius: 10px; border: 0.5px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02); margin-bottom: 6px; transition: border-color 0.15s; }
     .lb-row:hover { border-color: rgba(255,255,255,0.13); }
     .lb-pos { font-size: 16px; font-weight: 700; width: 24px; text-align: center; color: rgba(255,255,255,0.2); }
@@ -63,6 +88,7 @@
     .lb-wl { font-size: 11px; color: rgba(255,255,255,0.3); }
     .lb-bar-wrap { width: 50px; height: 4px; background: rgba(255,255,255,0.07); border-radius: 2px; overflow: hidden; }
     .lb-bar-fill { height: 100%; border-radius: 2px; }
+    
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; }
     .modal-overlay.open { display: flex; }
     .modal { background: #13131a; border: 0.5px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 22px; width: 320px; max-width: 90vw; }
@@ -77,7 +103,7 @@
     .btn-cancel { flex: 1; font-size: 13px; text-transform: uppercase; padding: 9px; border-radius: 8px; border: 0.5px solid rgba(255,255,255,0.12); background: transparent; cursor: pointer; color: rgba(255,255,255,0.4); font-family: Inter, sans-serif; }
     .footer { text-align: center; font-size: 11px; color: rgba(255,255,255,0.2); margin-top: 2rem; }
     .footer a { color: rgba(55,138,221,0.7); text-decoration: none; }
-    @media (max-width: 500px) { .lb-rank { display: none; } .lb-bar-wrap { display: none; } }
+    @media (max-width: 500px) { .lb-rank { display: none; } .lb-bar-wrap { display: none; } .target-lp-box { flex-direction: column; gap: 10px; text-align: center; } .target-lp-box .rem-lp { text-align: center; } }
   </style>
 </head>
 <body>
@@ -85,23 +111,57 @@
   <div class="container">
     <div class="header">
       <h1>CBA BÜYÜK LOL İDDİASI</h1>
-      <div class="subtitle">50 Maç İddiası · Dereceli · EUW</div>
     </div>
-    <div class="leader-bar">
-      <div>
-        <div class="lbl">👑 Lider</div>
-        <div class="val" id="leader-name">-</div>
+    
+    <div class="tabs">
+      <button class="tab-btn active" id="btn-tab1" onclick="switchTab('tab1')">50 Maç İddiası</button>
+      <button class="tab-btn" id="btn-tab2" onclick="switchTab('tab2')">Tan Efe İddiası</button>
+    </div>
+
+    <div id="tab1" class="tab-content active">
+      <div class="leader-bar">
+        <div>
+          <div class="lbl">👑 Lider</div>
+          <div class="val" id="leader-name">-</div>
+        </div>
+      </div>
+      <button class="refresh-all-btn" onclick="refreshAll()">⟳ Tüm Verileri Güncelle</button>
+      <div class="players-grid" id="players-grid"></div>
+      <div style="margin-bottom:1.5rem;">
+        <div class="section-title">Sıralama</div>
+        <div id="lb-list"></div>
       </div>
     </div>
-    <button class="refresh-all-btn" onclick="refreshAll()">⟳ Tüm Verileri Güncelle</button>
-    <div class="players-grid" id="players-grid"></div>
-    <div style="margin-bottom:1.5rem;">
-      <div class="section-title">Sıralama</div>
-      <div id="lb-list"></div>
+
+    <div id="tab2" class="tab-content">
+      <div class="timer-container">
+        <div class="timer-lbl">İDDİANIN BİTMESİNE KALAN SÜRE</div>
+        <div class="timer-val" id="timer-val">Yükleniyor...</div>
+      </div>
+      
+      <div class="target-lp-box">
+        <div>
+          <div class="target-name">Hedef Rank</div>
+          <div class="target-val">Diamond 4 (0 LP)</div>
+        </div>
+        <div class="rem-lp">
+          <div class="target-name">Hedefe Kalan</div>
+          <div class="rem-lp-val" id="kalan-lp">...</div>
+        </div>
+      </div>
+
+      <button class="refresh-all-btn" onclick="fetchTanCan()" id="tancan-refresh-btn">⟳ Veriyi Güncelle</button>
+      
+      <div class="tancan-grid">
+        <div class="player-card" id="tancan-card">
+          </div>
+      </div>
     </div>
+
     <div class="footer" id="last-updated"></div>
     <div class="footer" style="margin-top:6px;">Riot API · <a href="https://www.leagueofgraphs.com" target="_blank">leagueofgraphs.com</a></div>
   </div>
+
   <div class="modal-overlay" id="modal">
     <div class="modal">
       <h2 id="modal-title">Oyuncu Düzenle</h2>
@@ -121,9 +181,24 @@
       </div>
     </div>
   </div>
+
   <script>
     var PROXY = '/api/riot';
-    var TOTAL = 50;
+    
+    // --- TAB SİSTEMİ MANTIĞI ---
+    function switchTab(tabId) {
+      document.getElementById('tab1').classList.remove('active');
+      document.getElementById('tab2').classList.remove('active');
+      document.getElementById('btn-tab1').classList.remove('active');
+      document.getElementById('btn-tab2').classList.remove('active');
+      
+      document.getElementById(tabId).classList.add('active');
+      document.getElementById('btn-' + tabId).classList.add('active');
+    }
+
+    // --- GENEL DEĞİŞKENLER & FONKSİYONLAR ---
+    var TOTAL = 50; // 50 Maç İddiası için
+    var TARGET_LP = 2400; // Diamond 4 (0 LP) hedefi
     
     var CITIES = [
       "", "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Amasya", "Ankara", "Antalya", "Artvin", "Aydın", "Balıkesir",
@@ -153,11 +228,23 @@
     var TIER_ORDER = { CHALLENGER:10, GRANDMASTER:9, MASTER:8, DIAMOND:7, EMERALD:6, PLATINUM:5, GOLD:4, SILVER:3, BRONZE:2, IRON:1, Unranked:0 };
     var DIV_ORDER = { I:4, II:3, III:2, IV:1 };
 
+    // LP Hesaplama Sözlükleri (Her küme 100 LP artar)
+    var TIER_BASE_LP = { 'IRON':0, 'BRONZE':400, 'SILVER':800, 'GOLD':1200, 'PLATINUM':1600, 'EMERALD':2000, 'DIAMOND':2400, 'MASTER':2800, 'GRANDMASTER':2800, 'CHALLENGER':2800, 'Unranked':0 };
+    var DIV_OFFSET = { 'IV':0, 'III':100, 'II':200, 'I':300, '':0 };
+
     function rankScore(p) {
       var t = TIER_ORDER[p.tier] || 0;
       var d = DIV_ORDER[p.division] || 0;
       var l = p.lp || 0;
       return t * 10000 + d * 1000 + l;
+    }
+    
+    function getAbsoluteLP(p) {
+      if(p.tier === 'Unranked' || !p.tier) return 0;
+      var base = TIER_BASE_LP[p.tier] || 0;
+      if (['MASTER','GRANDMASTER','CHALLENGER'].indexOf(p.tier) !== -1) return base + p.lp;
+      var offset = DIV_OFFSET[p.division] || 0;
+      return base + offset + p.lp;
     }
 
     function rc(tier) { return RC[tier] || RC['Unranked']; }
@@ -169,6 +256,7 @@
       return capitalize(tier) + ' ' + (ROMAN[division] || division) + ' - ' + lp + ' LP';
     }
 
+    // --- SEKME 1 (50 MAÇ) VERİ VE MANTIĞI ---
     var DEF = [
       { name:'Gökalp', gameName:'teigoff', tag:'8255',  tier:'Unranked', division:'', lp:0, wins:0, losses:0 },
       { name:'Ömer',   gameName:'LASHERZ', tag:'GRT27', tier:'Unranked', division:'', lp:0, wins:0, losses:0 },
@@ -192,7 +280,6 @@
       var p = players[i];
       if (!p.gameName || !p.tag) return Promise.resolve();
 
-      // SABİT HESAP MANTIĞI
       if (p.name === 'Ömer (İkinci Hesap)') {
         p.tier = 'GOLD'; p.division = 'II'; p.lp = 19; p.wins = 18; p.losses = 32;
         p.loading = false; p.error = '';
@@ -225,11 +312,7 @@
         })
         .catch(function(err) { p.error = err.message || 'Hata'; })
         .then(function() {
-          p.loading = false;
-          persist();
-          renderCard(i);
-          renderLeaderboard();
-          updateTimestamp();
+          p.loading = false; persist(); renderCard(i); renderLeaderboard(); updateTimestamp();
         });
     }
 
@@ -253,19 +336,12 @@
       var rl = rankLabel(p.tier, p.division, p.lp);
       var hasAcc = p.gameName && p.tag;
       var logUrl = hasAcc ? 'https://www.leagueofgraphs.com/summoner/euw/' + p.gameName.toLowerCase() + '-' + p.tag : '';
-      
-      var refreshBtnHtml = (hasAcc && p.name !== 'Ömer (İkinci Hesap)') ? 
-                           '<button class="card-btn" onclick="fetchPlayer(' + i + ')" ' + (p.loading ? 'disabled' : '') + '>⟳ Yenile</button>' : '';
+      var refreshBtnHtml = (hasAcc && p.name !== 'Ömer (İkinci Hesap)') ? '<button class="card-btn" onclick="fetchPlayer(' + i + ')" ' + (p.loading ? 'disabled' : '') + '>⟳ Yenile</button>' : '';
 
-      // --- ŞEHİR SELAMLAMA MANTIĞI ---
       var cityHtml = "";
       var plateStr = p.wins.toString() + p.losses.toString();
       var plate = parseInt(plateStr, 10);
-      
-      if (plate >= 1 && plate <= 81) {
-        cityHtml = '<div class="city-greeting">🚕 ' + CITIES[plate] + ' şehrine selamlar!</div>';
-      }
-      // -------------------------------
+      if (plate >= 1 && plate <= 81) cityHtml = '<div class="city-greeting">🚕 ' + CITIES[plate] + ' şehrine selamlar!</div>';
 
       card.innerHTML =
         '<div class="accent-bar" style="background:' + c.a + '"></div>' +
@@ -277,20 +353,6 @@
         cityHtml +
         '<div class="progress-section"><div class="progress-label"><span>' + played + ' / ' + TOTAL + ' mac</span><span style="font-weight:600;color:' + (rem === 0 ? '#97C459' : 'rgba(255,255,255,0.6)') + '">' + rem + ' kalan</span></div><div class="progress-track"><div class="progress-fill" style="width:' + pct + '%;background:' + c.a + '"></div></div></div>' +
         '<div class="card-btns">' + refreshBtnHtml + '<button class="card-btn" onclick="openModal(' + i + ')">Düzenle</button></div>';
-    }
-
-    function render() {
-      var grid = document.getElementById('players-grid');
-      grid.innerHTML = '';
-      for (var i = 0; i < players.length; i++) {
-        var card = document.createElement('div');
-        card.className = 'player-card';
-        card.id = 'card-' + i;
-        grid.appendChild(card);
-        renderCard(i);
-      }
-      renderLeaderboard();
-      updateTimestamp();
     }
 
     function renderLeaderboard() {
@@ -314,6 +376,130 @@
       }
     }
 
+
+    // --- SEKME 2 (TAN EFE) VERİ VE MANTIĞI ---
+    var tanCan = JSON.parse(localStorage.getItem('lol_v7_tancan') || 'null') || { name:'Tan Can', gameName:'Tcbspeedrun', tag:'3131', tier:'Unranked', division:'', lp:0, wins:0, losses:0 };
+    tanCan.loading = false; tanCan.error = '';
+
+    function persistTanCan() {
+      localStorage.setItem('lol_v7_tancan', JSON.stringify({ name:tanCan.name, gameName:tanCan.gameName, tag:tanCan.tag, tier:tanCan.tier, division:tanCan.division, lp:tanCan.lp, wins:tanCan.wins, losses:tanCan.losses }));
+    }
+
+    function fetchTanCan() {
+      var p = tanCan;
+      var btn = document.getElementById('tancan-refresh-btn');
+      p.loading = true; p.error = '';
+      btn.disabled = true;
+      btn.innerText = 'Yükleniyor...';
+      renderTanCan();
+
+      return fetch(PROXY + '?region=europe&path=riot/account/v1/accounts/by-riot-id/' + p.gameName + '/' + p.tag)
+        .then(function(r) { return r.json(); })
+        .then(function(acc) {
+          if (!acc.puuid) throw new Error(acc.status ? acc.status.message : 'Hesap bulunamadı');
+          return fetch(PROXY + '?path=lol/league/v4/entries/by-puuid/' + acc.puuid);
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(rankData) {
+          var entries = Array.isArray(rankData) ? rankData : [rankData];
+          var solo = null;
+          for (var j = 0; j < entries.length; j++) {
+            if (entries[j].queueType === 'RANKED_SOLO_5x5') { solo = entries[j]; break; }
+          }
+          if (solo) {
+            p.tier = solo.tier; p.division = solo.rank;
+            p.lp = solo.leaguePoints; p.wins = solo.wins; p.losses = solo.losses;
+          } else {
+            p.tier = 'Unranked'; p.division = ''; p.lp = 0; p.wins = 0; p.losses = 0;
+          }
+          p.error = '';
+        })
+        .catch(function(err) { p.error = err.message || 'Hata'; })
+        .then(function() {
+          p.loading = false;
+          btn.disabled = false;
+          btn.innerText = '⟳ Veriyi Güncelle';
+          persistTanCan();
+          renderTanCan();
+          updateTimestamp();
+        });
+    }
+
+    function renderTanCan() {
+      var p = tanCan;
+      var card = document.getElementById('tancan-card');
+      var played = p.wins + p.losses;
+      var wr = played > 0 ? Math.round(p.wins / played * 100) : 0;
+      var c = rc(p.tier);
+      var rl = rankLabel(p.tier, p.division, p.lp);
+      var logUrl = 'https://www.leagueofgraphs.com/summoner/euw/' + p.gameName.toLowerCase() + '-' + p.tag;
+      var opggUrl = 'https://www.op.gg/summoners/euw/' + p.gameName + '-' + p.tag;
+      
+      var currentAbsLP = getAbsoluteLP(p);
+      var lpNeeded = TARGET_LP - currentAbsLP;
+      if (lpNeeded < 0) lpNeeded = 0; // Hedefe ulaştıysa
+
+      // Kalan LP'yi üstteki bar alanına yaz
+      document.getElementById('kalan-lp').innerText = lpNeeded + " LP";
+
+      // Progress Bar Hesaplaması (Diamond 4'e ulaşma yüzdesi)
+      var pct = Math.min(100, Math.round((currentAbsLP / TARGET_LP) * 100));
+
+      card.innerHTML =
+        '<div class="accent-bar" style="background:' + c.a + '"></div>' +
+        '<div class="name-row"><div class="pname">' + p.name + '</div><div class="rank-badge" style="background:' + c.b + ';color:' + c.t + '">' + rl + '</div></div>' +
+        '<div class="summoner-row"><div class="summoner-txt">' + p.gameName + '#' + p.tag + '</div><a class="log-btn" href="' + logUrl + '" target="_blank">LoG</a><a class="log-btn" href="' + opggUrl + '" target="_blank">OP.GG</a></div>' +
+        (p.loading ? '<div class="status-txt"><span class="status-dot" style="background:#FFB800"></span>Yükleniyor...</div>' : '') +
+        (p.error ? '<div class="status-txt"><span class="status-dot" style="background:#E24B4A"></span>' + p.error + '</div>' : '') +
+        '<div class="stats-row"><div class="stat-box win-box"><div class="num">' + p.wins + '</div><div class="lbl">Galibiyet</div></div><div class="stat-box lose-box"><div class="num">' + p.losses + '</div><div class="lbl">Mağlubiyet</div></div><div class="stat-box wr-box"><div class="num">' + wr + '%</div><div class="lbl">Oran</div></div></div>' +
+        '<div class="progress-section"><div class="progress-label"><span>Diamond 4 İlerlemesi</span><span style="font-weight:600;color:' + (lpNeeded === 0 ? '#97C459' : 'rgba(255,255,255,0.6)') + '">' + pct + '%</span></div><div class="progress-track"><div class="progress-fill" style="width:' + pct + '%;background:' + c.a + '"></div></div></div>';
+    }
+
+    // --- GERİ SAYIM SAYACI ---
+    function initTimer() {
+      // 8 Mayıs 2026, Saat 12:36 (Aylar 0'dan başlar, o yüzden Mayıs=4)
+      var targetDate = new Date(2026, 4, 8, 12, 36, 0).getTime();
+      
+      setInterval(function() {
+        var now = new Date().getTime();
+        var diff = targetDate - now;
+        
+        if (diff < 0) {
+          document.getElementById('timer-val').innerText = "İDDİA SÜRESİ DOLDU!";
+          return;
+        }
+        
+        var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        var secs = Math.floor((diff % (1000 * 60)) / 1000);
+        
+        // Tek hanelilerin başına 0 ekleme
+        hours = hours < 10 ? "0" + hours : hours;
+        mins = mins < 10 ? "0" + mins : mins;
+        secs = secs < 10 ? "0" + secs : secs;
+        
+        document.getElementById('timer-val').innerText = days + " GÜN " + hours + ":" + mins + ":" + secs;
+      }, 1000);
+    }
+
+
+    // --- TEMEL SİSTEM İŞLEMLERİ ---
+    function render() {
+      var grid = document.getElementById('players-grid');
+      grid.innerHTML = '';
+      for (var i = 0; i < players.length; i++) {
+        var card = document.createElement('div');
+        card.className = 'player-card';
+        card.id = 'card-' + i;
+        grid.appendChild(card);
+        renderCard(i);
+      }
+      renderLeaderboard();
+      renderTanCan();
+      updateTimestamp();
+    }
+
     function updateTimestamp() {
       var ts = localStorage.getItem('lol_v7_ts');
       if (ts) {
@@ -322,6 +508,7 @@
       }
     }
 
+    // Modal işlemleri (Sadece 50 Maç iddiacıları için korunmuştur)
     function openModal(i) {
       ei = i;
       var p = players[i];
@@ -343,8 +530,11 @@
 
     document.getElementById('modal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
 
+    // Sayfa açıldığında başlat
     render();
     refreshAll();
+    fetchTanCan();
+    initTimer();
   </script>
 </body>
 </html>
