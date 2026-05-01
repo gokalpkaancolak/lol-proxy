@@ -89,18 +89,6 @@
     .lb-bar-wrap { width: 50px; height: 4px; background: rgba(255,255,255,0.07); border-radius: 2px; overflow: hidden; }
     .lb-bar-fill { height: 100%; border-radius: 2px; }
     
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; }
-    .modal-overlay.open { display: flex; }
-    .modal { background: #13131a; border: 0.5px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 22px; width: 320px; max-width: 90vw; }
-    .modal h2 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 18px; }
-    .field { margin-bottom: 14px; }
-    .field label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: rgba(255,255,255,0.4); margin-bottom: 5px; }
-    .field input { width: 100%; font-size: 14px; background: rgba(255,255,255,0.05); border: 0.5px solid rgba(255,255,255,0.12); border-radius: 8px; color: #e8e6e0; padding: 8px 10px; outline: none; font-family: Inter, sans-serif; }
-    .field input:focus { border-color: rgba(255,255,255,0.25); }
-    .field .hint { font-size: 10px; color: rgba(255,255,255,0.25); margin-top: 4px; }
-    .modal-btns { display: flex; gap: 8px; margin-top: 18px; }
-    .btn-save { flex: 1; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding: 9px; border-radius: 8px; border: none; cursor: pointer; color: #fff; background: #378ADD; font-family: Inter, sans-serif; }
-    .btn-cancel { flex: 1; font-size: 13px; text-transform: uppercase; padding: 9px; border-radius: 8px; border: 0.5px solid rgba(255,255,255,0.12); background: transparent; cursor: pointer; color: rgba(255,255,255,0.4); font-family: Inter, sans-serif; }
     .footer { text-align: center; font-size: 11px; color: rgba(255,255,255,0.2); margin-top: 2rem; }
     .footer a { color: rgba(55,138,221,0.7); text-decoration: none; }
     @media (max-width: 500px) { .lb-rank { display: none; } .lb-bar-wrap { display: none; } .target-lp-box { flex-direction: column; gap: 10px; text-align: center; } .target-lp-box .rem-lp { text-align: center; } }
@@ -118,6 +106,7 @@
       <button class="tab-btn" id="btn-tab2" onclick="switchTab('tab2')">Tan Efe İddiası</button>
     </div>
 
+    <!-- SEKME 1: 50 MAÇ İDDİASI -->
     <div id="tab1" class="tab-content active">
       <div class="leader-bar">
         <div>
@@ -133,6 +122,7 @@
       </div>
     </div>
 
+    <!-- SEKME 2: TAN EFE İDDİASI -->
     <div id="tab2" class="tab-content">
       <div class="timer-container">
         <div class="timer-lbl">İDDİANIN BİTMESİNE KALAN SÜRE</div>
@@ -154,32 +144,13 @@
       
       <div class="tancan-grid">
         <div class="player-card" id="tancan-card">
-          </div>
+          <!-- Tan Can içeriği JS ile basılacak -->
+        </div>
       </div>
     </div>
 
     <div class="footer" id="last-updated"></div>
     <div class="footer" style="margin-top:6px;">Riot API · <a href="https://www.leagueofgraphs.com" target="_blank">leagueofgraphs.com</a></div>
-  </div>
-
-  <div class="modal-overlay" id="modal">
-    <div class="modal">
-      <h2 id="modal-title">Oyuncu Düzenle</h2>
-      <div class="field">
-        <label>Oyun Adi</label>
-        <input type="text" id="f-gamename" placeholder="ör: teigoff">
-        <div class="hint">Riot ID'nin # işaretinden önceki kısım</div>
-      </div>
-      <div class="field">
-        <label>Tag</label>
-        <input type="text" id="f-tag" placeholder="ör: 8255">
-        <div class="hint">Riot ID'nin # işaretinden sonraki kısım</div>
-      </div>
-      <div class="modal-btns">
-        <button class="btn-cancel" onclick="closeModal()">İptal</button>
-        <button class="btn-save" onclick="saveAndFetch()">Kaydet & Çek</button>
-      </div>
-    </div>
   </div>
 
   <script>
@@ -197,8 +168,11 @@
     }
 
     // --- GENEL DEĞİŞKENLER & FONKSİYONLAR ---
-    var TOTAL = 50; // 50 Maç İddiası için
-    var TARGET_LP = 2400; // Diamond 4 (0 LP) hedefi
+    var TOTAL = 50; 
+    
+    // Zümrüt 4 ve Diamond 4 aralığı (400 LP fark)
+    var START_LP_TANCAN = 2000; // Emerald 4 taban LP
+    var TARGET_LP = 2400; // Diamond 4 hedef LP
     
     var CITIES = [
       "", "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Amasya", "Ankara", "Antalya", "Artvin", "Aydın", "Balıkesir",
@@ -228,7 +202,6 @@
     var TIER_ORDER = { CHALLENGER:10, GRANDMASTER:9, MASTER:8, DIAMOND:7, EMERALD:6, PLATINUM:5, GOLD:4, SILVER:3, BRONZE:2, IRON:1, Unranked:0 };
     var DIV_ORDER = { I:4, II:3, III:2, IV:1 };
 
-    // LP Hesaplama Sözlükleri (Her küme 100 LP artar)
     var TIER_BASE_LP = { 'IRON':0, 'BRONZE':400, 'SILVER':800, 'GOLD':1200, 'PLATINUM':1600, 'EMERALD':2000, 'DIAMOND':2400, 'MASTER':2800, 'GRANDMASTER':2800, 'CHALLENGER':2800, 'Unranked':0 };
     var DIV_OFFSET = { 'IV':0, 'III':100, 'II':200, 'I':300, '':0 };
 
@@ -256,19 +229,25 @@
       return capitalize(tier) + ' ' + (ROMAN[division] || division) + ' - ' + lp + ' LP';
     }
 
-    // --- SEKME 1 (50 MAÇ) VERİ VE MANTIĞI ---
+    // --- SABİTLENMİŞ OYUNCULARIN LİSTESİ ---
+    var LOCKED_DATA = {
+      'Gökalp': { tier: 'PLATINUM', division: 'IV', lp: 65, wins: 24, losses: 26 },
+      'Emre': { tier: 'PLATINUM', division: 'IV', lp: 60, wins: 24, losses: 26 },
+      'Ömer': { tier: 'GOLD', division: 'III', lp: 67, wins: 17, losses: 33 },
+      'Ömer (İkinci Hesap)': { tier: 'GOLD', division: 'II', lp: 19, wins: 18, losses: 32 }
+    };
+
     var DEF = [
       { name:'Gökalp', gameName:'teigoff', tag:'8255',  tier:'Unranked', division:'', lp:0, wins:0, losses:0 },
       { name:'Ömer',   gameName:'LASHERZ', tag:'GRT27', tier:'Unranked', division:'', lp:0, wins:0, losses:0 },
       { name:'Uğur',   gameName:'puboiES', tag:'2221',  tier:'Unranked', division:'', lp:0, wins:0, losses:0 },
       { name:'Emre',   gameName:'hotchess',tag:'576',   tier:'Unranked', division:'', lp:0, wins:0, losses:0 },
       { name:'Polat',  gameName:'aoh',     tag:'www',   tier:'Unranked', division:'', lp:0, wins:0, losses:0 },
-      { name:'Ömer (İkinci Hesap)', gameName:'Lasherzz', tag:'6980', tier:'GOLD', division:'II', lp:19, wins:18, losses:32 }
+      { name:'Ömer (İkinci Hesap)', gameName:'Lasherzz', tag:'6980', tier:'Unranked', division:'', lp:0, wins:0, losses:0 }
     ];
 
     var players = JSON.parse(localStorage.getItem('lol_v7') || 'null') || DEF;
     for (var i = 0; i < players.length; i++) { players[i].loading = false; players[i].error = ''; }
-    var ei = -1;
 
     function persist() {
       var toSave = players.map(function(p) { return { name:p.name, gameName:p.gameName, tag:p.tag, tier:p.tier, division:p.division, lp:p.lp, wins:p.wins, losses:p.losses }; });
@@ -280,8 +259,10 @@
       var p = players[i];
       if (!p.gameName || !p.tag) return Promise.resolve();
 
-      if (p.name === 'Ömer (İkinci Hesap)') {
-        p.tier = 'GOLD'; p.division = 'II'; p.lp = 19; p.wins = 18; p.losses = 32;
+      // Biten maçlar için sabit verileri yükle
+      if (LOCKED_DATA[p.name]) {
+        var ld = LOCKED_DATA[p.name];
+        p.tier = ld.tier; p.division = ld.division; p.lp = ld.lp; p.wins = ld.wins; p.losses = ld.losses;
         p.loading = false; p.error = '';
         persist(); renderCard(i); renderLeaderboard(); updateTimestamp();
         return Promise.resolve();
@@ -336,7 +317,11 @@
       var rl = rankLabel(p.tier, p.division, p.lp);
       var hasAcc = p.gameName && p.tag;
       var logUrl = hasAcc ? 'https://www.leagueofgraphs.com/summoner/euw/' + p.gameName.toLowerCase() + '-' + p.tag : '';
-      var refreshBtnHtml = (hasAcc && p.name !== 'Ömer (İkinci Hesap)') ? '<button class="card-btn" onclick="fetchPlayer(' + i + ')" ' + (p.loading ? 'disabled' : '') + '>⟳ Yenile</button>' : '';
+      
+      // Sabitlenmiş bir oyuncuysa veya maçları bittiyse "Yenile" butonunu gösterme
+      var isLocked = !!LOCKED_DATA[p.name];
+      var refreshBtnHtml = (hasAcc && !isLocked) ? '<button class="card-btn" onclick="fetchPlayer(' + i + ')" ' + (p.loading ? 'disabled' : '') + '>⟳ Yenile</button>' : '';
+      var btnsContainer = refreshBtnHtml ? '<div class="card-btns">' + refreshBtnHtml + '</div>' : '';
 
       var cityHtml = "";
       var plateStr = p.wins.toString() + p.losses.toString();
@@ -352,7 +337,7 @@
         '<div class="stats-row"><div class="stat-box win-box"><div class="num">' + p.wins + '</div><div class="lbl">Galibiyet</div></div><div class="stat-box lose-box"><div class="num">' + p.losses + '</div><div class="lbl">Mağlubiyet</div></div><div class="stat-box wr-box"><div class="num">' + wr + '%</div><div class="lbl">Oran</div></div></div>' +
         cityHtml +
         '<div class="progress-section"><div class="progress-label"><span>' + played + ' / ' + TOTAL + ' mac</span><span style="font-weight:600;color:' + (rem === 0 ? '#97C459' : 'rgba(255,255,255,0.6)') + '">' + rem + ' kalan</span></div><div class="progress-track"><div class="progress-fill" style="width:' + pct + '%;background:' + c.a + '"></div></div></div>' +
-        '<div class="card-btns">' + refreshBtnHtml + '<button class="card-btn" onclick="openModal(' + i + ')">Düzenle</button></div>';
+        btnsContainer;
     }
 
     function renderLeaderboard() {
@@ -397,7 +382,6 @@
         .then(function(r) { return r.json(); })
         .then(function(acc) {
           if (!acc.puuid) throw new Error(acc.status ? acc.status.message : 'Hesap bulunamadı');
-          // TR SUNUCUSU İÇİN region=tr1 EKLENDİ
           return fetch(PROXY + '?region=tr1&path=lol/league/v4/entries/by-puuid/' + acc.puuid);
         })
         .then(function(r) { return r.json(); })
@@ -434,19 +418,23 @@
       var c = rc(p.tier);
       var rl = rankLabel(p.tier, p.division, p.lp);
       
-      // LINKLER TR SUNUCUSU OLARAK GÜNCELLENDİ
       var logUrl = 'https://www.leagueofgraphs.com/summoner/tr/' + p.gameName.toLowerCase() + '-' + p.tag;
       var opggUrl = 'https://www.op.gg/summoners/tr/' + p.gameName + '-' + p.tag;
       
       var currentAbsLP = getAbsoluteLP(p);
+      
+      // Zümrüt 4 (2000) - Diamond 4 (2400) arası mesafe 400 LP'dir.
+      var totalJourney = TARGET_LP - START_LP_TANCAN;
+      
       var lpNeeded = TARGET_LP - currentAbsLP;
-      if (lpNeeded < 0) lpNeeded = 0; // Hedefe ulaştıysa
+      if (lpNeeded < 0) lpNeeded = 0; 
 
-      // Kalan LP'yi üstteki bar alanına yaz
+      var lpEarned = currentAbsLP - START_LP_TANCAN;
+      if (lpEarned < 0) lpEarned = 0;
+
       document.getElementById('kalan-lp').innerText = lpNeeded + " LP";
 
-      // Progress Bar Hesaplaması (Diamond 4'e ulaşma yüzdesi)
-      var pct = Math.min(100, Math.round((currentAbsLP / TARGET_LP) * 100));
+      var pct = Math.min(100, Math.round((lpEarned / totalJourney) * 100));
 
       card.innerHTML =
         '<div class="accent-bar" style="background:' + c.a + '"></div>' +
@@ -455,13 +443,13 @@
         (p.loading ? '<div class="status-txt"><span class="status-dot" style="background:#FFB800"></span>Yükleniyor...</div>' : '') +
         (p.error ? '<div class="status-txt"><span class="status-dot" style="background:#E24B4A"></span>' + p.error + '</div>' : '') +
         '<div class="stats-row"><div class="stat-box win-box"><div class="num">' + p.wins + '</div><div class="lbl">Galibiyet</div></div><div class="stat-box lose-box"><div class="num">' + p.losses + '</div><div class="lbl">Mağlubiyet</div></div><div class="stat-box wr-box"><div class="num">' + wr + '%</div><div class="lbl">Oran</div></div></div>' +
-        '<div class="progress-section"><div class="progress-label"><span>Diamond 4 İlerlemesi</span><span style="font-weight:600;color:' + (lpNeeded === 0 ? '#97C459' : 'rgba(255,255,255,0.6)') + '">' + pct + '%</span></div><div class="progress-track"><div class="progress-fill" style="width:' + pct + '%;background:' + c.a + '"></div></div></div>';
+        '<div class="progress-section"><div class="progress-label"><span>Zümrüt 4 → Diamond 4 İlerlemesi</span><span style="font-weight:600;color:' + (lpNeeded === 0 ? '#97C459' : 'rgba(255,255,255,0.6)') + '">' + pct + '%</span></div><div class="progress-track"><div class="progress-fill" style="width:' + pct + '%;background:' + c.a + '"></div></div></div>';
     }
 
     // --- GERİ SAYIM SAYACI ---
     function initTimer() {
-      // 8 Mayıs 2026, Saat 12:36 (Aylar 0'dan başlar, o yüzden Mayıs=4)
-      var targetDate = new Date(2026, 4, 8, 12, 36, 0).getTime();
+      // 8 Mayıs 2026, Saat 19:36 (Aylar 0'dan başlar, o yüzden Mayıs=4)
+      var targetDate = new Date(2026, 4, 8, 19, 36, 0).getTime();
       
       setInterval(function() {
         var now = new Date().getTime();
@@ -477,7 +465,6 @@
         var mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         var secs = Math.floor((diff % (1000 * 60)) / 1000);
         
-        // Tek hanelilerin başına 0 ekleme
         hours = hours < 10 ? "0" + hours : hours;
         mins = mins < 10 ? "0" + mins : mins;
         secs = secs < 10 ? "0" + secs : secs;
@@ -485,7 +472,6 @@
         document.getElementById('timer-val').innerText = days + " GÜN " + hours + ":" + mins + ":" + secs;
       }, 1000);
     }
-
 
     // --- TEMEL SİSTEM İŞLEMLERİ ---
     function render() {
@@ -510,28 +496,6 @@
         document.getElementById('last-updated').textContent = 'Son güncelleme: ' + d.toLocaleDateString('tr-TR') + ' ' + d.toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'});
       }
     }
-
-    // Modal işlemleri (Sadece 50 Maç iddiacıları için korunmuştur)
-    function openModal(i) {
-      ei = i;
-      var p = players[i];
-      document.getElementById('modal-title').textContent = p.name + ' · Düzenle';
-      document.getElementById('f-gamename').value = p.gameName || '';
-      document.getElementById('f-tag').value = p.tag || '';
-      document.getElementById('modal').classList.add('open');
-    }
-
-    function closeModal() { document.getElementById('modal').classList.remove('open'); }
-
-    function saveAndFetch() {
-      players[ei].gameName = document.getElementById('f-gamename').value.trim();
-      players[ei].tag = document.getElementById('f-tag').value.trim();
-      persist(); closeModal();
-      renderCard(ei);
-      fetchPlayer(ei);
-    }
-
-    document.getElementById('modal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
 
     // Sayfa açıldığında başlat
     render();
