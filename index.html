@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBA Trendyol Süper Lig Tahmin Ligi</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-white min-h-screen">
+    <div id="root"></div>
+    <script type="text/babel">
+        function App() {
+            const [maclar, setMaclar] = React.useState([]);
+            const [kullanici, setKullanici] = React.useState(localStorage.getItem('cba_user') || null);
+
+            React.useEffect(() => {
+                // Hazırladığın api/maclar.js dosyasından veriyi çeker
+                fetch('/api/maclar')
+                    .then(res => res.json())
+                    .then(data => {
+                        if(data.response) setMaclar(data.response);
+                    })
+                    .catch(err => console.error("Veri çekilemedi", err));
+            }, []);
+
+            if (!kullanici) {
+                return (
+                    <div className="flex flex-col items-center justify-center min-h-screen">
+                        <h1 className="text-3xl font-bold text-[#F27A1A] mb-8">CBA Tahmin Ligi</h1>
+                        <button 
+                            onClick={() => {
+                                const isim = prompt("Kullanıcı adınızı girin:");
+                                if(isim) {
+                                    localStorage.setItem('cba_user', isim);
+                                    setKullanici(isim);
+                                }
+                            }}
+                            className="bg-[#F27A1A] text-white px-6 py-2 rounded font-bold">
+                            Giriş Yap
+                        </button>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="p-6 max-w-2xl mx-auto">
+                    <div className="flex justify-between items-center mb-8 border-b border-slate-800 pb-4">
+                        <h1 className="text-2xl font-bold text-[#F27A1A]">CBA Tahmin Ligi</h1>
+                        <div className="flex gap-4 items-center">
+                            <span>Hoş geldin, {kullanici}</span>
+                            <button onClick={() => { localStorage.removeItem('cba_user'); setKullanici(null); }} className="text-red-500 text-sm">Çıkış</button>
+                        </div>
+                    </div>
+                    <div className="space-y-4">
+                        {maclar.length === 0 ? <p>Maçlar yükleniyor...</p> : maclar.map((mac, i) => (
+                            <div key={i} className="bg-slate-900 p-4 rounded-lg flex justify-between items-center">
+                                <div>
+                                    <p className="text-sm text-slate-400">{new Date(mac.fixture.date).toLocaleString('tr-TR')}</p>
+                                    <p className="font-bold">{mac.teams.home.name} - {mac.teams.away.name}</p>
+                                </div>
+                                <div className="flex gap-2">
+                                    <button className="bg-slate-800 hover:bg-[#F27A1A] px-4 py-2 rounded">1</button>
+                                    <button className="bg-slate-800 hover:bg-[#F27A1A] px-4 py-2 rounded">0</button>
+                                    <button className="bg-slate-800 hover:bg-[#F27A1A] px-4 py-2 rounded">2</button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
