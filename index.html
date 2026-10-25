@@ -14,17 +14,24 @@
     <script type="text/babel">
         function App() {
             const [maclar, setMaclar] = React.useState([]);
+            const [hataMesaji, setHataMesaji] = React.useState("");
             const [kullanici, setKullanici] = React.useState(localStorage.getItem('cba_user') || null);
 
             React.useEffect(() => {
                 fetch('/api/maclar')
                     .then(res => res.json())
                     .then(data => {
-                        if(data.events) {
+                        // Eğer maçlar gelirse ekrana bas
+                        if(data.events && data.events.length > 0) {
                             setMaclar(data.events);
+                        } else if (data.data && data.data.events) {
+                            setMaclar(data.data.events);
+                        } else {
+                            // Maç gelmezse RapidAPI'nin gönderdiği cevabı kırmızı kutuda ekrana yazdır!
+                            setHataMesaji(JSON.stringify(data));
                         }
                     })
-                    .catch(err => console.error("Veri çekilemedi", err));
+                    .catch(err => setHataMesaji("İnternet veya Sunucu bağlantısı koptu."));
             }, []);
 
             if (!kullanici) {
@@ -55,8 +62,16 @@
                             <button onClick={() => { localStorage.removeItem('cba_user'); setKullanici(null); }} className="text-red-500 text-sm">Çıkış</button>
                         </div>
                     </div>
+                    
+                    {hataMesaji && (
+                        <div className="bg-red-900 text-white p-4 rounded mb-4 overflow-auto">
+                            <p className="font-bold text-xl mb-2">RapidAPI'den Maç Yerine Gelen Cevap:</p>
+                            <p className="text-sm font-mono">{hataMesaji}</p>
+                        </div>
+                    )}
+
                     <div className="space-y-4">
-                        {maclar.length === 0 ? <p>Maçlar yükleniyor...</p> : maclar.map((mac, i) => {
+                        {!hataMesaji && maclar.length === 0 ? <p>Maçlar yükleniyor...</p> : maclar.map((mac, i) => {
                             const evSahibi = mac.homeTeam ? mac.homeTeam.name : 'Ev Sahibi';
                             const deplasman = mac.awayTeam ? mac.awayTeam.name : 'Deplasman';
                             
