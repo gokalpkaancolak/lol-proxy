@@ -1,7 +1,7 @@
 module.exports = async function(req, res) {
   try {
-    // Trendyol Süper Lig (ID: 52) sezon listesini çekiyoruz
-    const url = 'https://sportapi7.p.rapidapi.com/api/v1/unique-tournament/52/seasons';
+    // Süper Lig (ID: 52) ve 26/27 Sezonu (ID: 98080) maç listesi endpoint'i
+    const url = 'https://sportapi7.p.rapidapi.com/api/v1/unique-tournament/52/season/98080/events';
     const apiCevap = await fetch(url, {
       method: 'GET',
       headers: {
