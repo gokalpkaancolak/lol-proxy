@@ -17,11 +17,13 @@
             const [kullanici, setKullanici] = React.useState(localStorage.getItem('cba_user') || null);
 
             React.useEffect(() => {
-                // Hazırladığın api/maclar.js dosyasından veriyi çeker
                 fetch('/api/maclar')
                     .then(res => res.json())
                     .then(data => {
-                        if(data.response) setMaclar(data.response);
+                        // SportAPI verileri 'events' dizisi içinde gönderir
+                        if(data.events) {
+                            setMaclar(data.events);
+                        }
                     })
                     .catch(err => console.error("Veri çekilemedi", err));
             }, []);
@@ -58,8 +60,7 @@
                         {maclar.length === 0 ? <p>Maçlar yükleniyor...</p> : maclar.map((mac, i) => (
                             <div key={i} className="bg-slate-900 p-4 rounded-lg flex justify-between items-center">
                                 <div>
-                                    <p className="text-sm text-slate-400">{new Date(mac.fixture.date).toLocaleString('tr-TR')}</p>
-                                    <p className="font-bold">{mac.teams.home.name} - {mac.teams.away.name}</p>
+                                    <p className="font-bold">{mac.homeTeam?.name || 'Ev Sahibi'} - {mac.awayTeam?.name || 'Deplasman'}</p>
                                 </div>
                                 <div className="flex gap-2">
                                     <button className="bg-slate-800 hover:bg-[#F27A1A] px-4 py-2 rounded">1</button>
