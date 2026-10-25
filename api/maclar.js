@@ -1,6 +1,6 @@
 module.exports = async function(req, res) {
   try {
-    // Trendyol Süper Lig ID'si (52) ile güncel sezon maçlarını çeken doğru endpoint
+    // Trendyol Süper Lig (ID: 52) sezon listesini çekiyoruz
     const url = 'https://sportapi7.p.rapidapi.com/api/v1/unique-tournament/52/seasons';
     const apiCevap = await fetch(url, {
       method: 'GET',
