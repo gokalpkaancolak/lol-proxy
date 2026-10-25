@@ -1,6 +1,7 @@
 module.exports = async function(req, res) {
   try {
-    const url = 'https://sportapi7.p.rapidapi.com/api/v1/tournament/1/season/61627/events';
+    // Trendyol Süper Lig ID'si (52) ile güncel sezon maçlarını çeken doğru endpoint
+    const url = 'https://sportapi7.p.rapidapi.com/api/v1/unique-tournament/52/seasons';
     const apiCevap = await fetch(url, {
       method: 'GET',
       headers: {
@@ -16,7 +17,7 @@ module.exports = async function(req, res) {
       res.status(200).json(veri);
     } catch (parseHatasi) {
       res.status(200).json({ 
-        hata: 'API maç listesi yerine şu metni gönderdi', 
+        hata: 'API veri formatı uyuşmadı', 
         detay: metin.substring(0, 300) 
       });
     }
