@@ -4,20 +4,17 @@ module.exports = async function(req, res) {
     const apiCevap = await fetch(url, {
       method: 'GET',
       headers: {
-        'x-rapidapi-key': process.env.RAPIDAPI_KEY || '',
+        'x-rapidapi-key': '94f86561ebmsh14de72fe8dec0afp111239jsnc2b0be6b89c3',
         'x-rapidapi-host': 'sportapi7.p.rapidapi.com'
       }
     });
 
-    // Veriyi çökmeyi engellemek için önce düz metin olarak okuyoruz
     const metin = await apiCevap.text(); 
     
     try {
-      // Eğer gerçek bir maç verisiyse JSON'a çevir
       const veri = JSON.parse(metin);
       res.status(200).json(veri);
     } catch (parseHatasi) {
-      // API maç yerine HTML veya hata metni yolladıysa, onu sayfaya gönder
       res.status(200).json({ 
         hata: 'API maç listesi yerine şu metni gönderdi', 
         detay: metin.substring(0, 300) 
