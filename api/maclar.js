@@ -1,7 +1,7 @@
 module.exports = async function(req, res) {
   try {
-    // Süper Lig (ID: 52) ve 26/27 Sezonu (ID: 98080) maç listesi endpoint'i
-    const url = 'https://sportapi7.p.rapidapi.com/api/v1/unique-tournament/52/season/98080/events';
+    // Doğrulanmış ve çalışan endpoint üzerinden 98080 sezonunun maçlarını istiyoruz
+    const url = 'https://sportapi7.p.rapidapi.com/api/v1/seasons/98080/events';
     const apiCevap = await fetch(url, {
       method: 'GET',
       headers: {
