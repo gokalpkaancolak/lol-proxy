@@ -1,7 +1,7 @@
 module.exports = async function(req, res) {
   try {
-    // İlk gün çalışan orijinal endpoint kalıbı, sadece sezon ID'si güncel (98080)
-    const url = 'https://sportapi7.p.rapidapi.com/api/v1/tournament/1/season/98080/team/35/events/last/0';
+    // Süper Lig (ID: 52) için doğrudan güncel maçları çeken endpoint
+    const url = 'https://sportapi7.p.rapidapi.com/api/v1/unique-tournament/52/events/next/0';
     const apiCevap = await fetch(url, {
       method: 'GET',
       headers: {
