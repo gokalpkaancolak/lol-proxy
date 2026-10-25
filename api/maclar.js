@@ -1,6 +1,6 @@
 module.exports = async function(req, res) {
   try {
-    // Doğru endpoint yapısı: /season/98080/events
+    // Tekil season yapısı ve events endpoint'i
     const url = 'https://sportapi7.p.rapidapi.com/api/v1/season/98080/events';
     const apiCevap = await fetch(url, {
       method: 'GET',
