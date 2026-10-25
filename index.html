@@ -20,7 +20,6 @@
                 fetch('/api/maclar')
                     .then(res => res.json())
                     .then(data => {
-                        // SportAPI verileri 'events' dizisi içinde gönderir
                         if(data.events) {
                             setMaclar(data.events);
                         }
@@ -57,18 +56,23 @@
                         </div>
                     </div>
                     <div className="space-y-4">
-                        {maclar.length === 0 ? <p>Maçlar yükleniyor...</p> : maclar.map((mac, i) => (
-                            <div key={i} className="bg-slate-900 p-4 rounded-lg flex justify-between items-center">
-                                <div>
-                                    <p className="font-bold">{mac.homeTeam?.name || 'Ev Sahibi'} - {mac.awayTeam?.name || 'Deplasman'}</p>
+                        {maclar.length === 0 ? <p>Maçlar yükleniyor...</p> : maclar.map((mac, i) => {
+                            const evSahibi = mac.homeTeam ? mac.homeTeam.name : 'Ev Sahibi';
+                            const deplasman = mac.awayTeam ? mac.awayTeam.name : 'Deplasman';
+                            
+                            return (
+                                <div key={i} className="bg-slate-900 p-4 rounded-lg flex justify-between items-center">
+                                    <div>
+                                        <p className="font-bold">{evSahibi} - {deplasman}</p>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <button className="bg-slate-800 hover:bg-[#F27A1A] px-4 py-2 rounded">1</button>
+                                        <button className="bg-slate-800 hover:bg-[#F27A1A] px-4 py-2 rounded">0</button>
+                                        <button className="bg-slate-800 hover:bg-[#F27A1A] px-4 py-2 rounded">2</button>
+                                    </div>
                                 </div>
-                                <div className="flex gap-2">
-                                    <button className="bg-slate-800 hover:bg-[#F27A1A] px-4 py-2 rounded">1</button>
-                                    <button className="bg-slate-800 hover:bg-[#F27A1A] px-4 py-2 rounded">0</button>
-                                    <button className="bg-slate-800 hover:bg-[#F27A1A] px-4 py-2 rounded">2</button>
-                                </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             );
